@@ -122,6 +122,11 @@ class PluginBorgbaseProfile extends CommonDBTM
         return true;
     }
 
+    public static function getIcon()
+    {
+        return PLUGIN_BORGBASE_ICON;
+    }
+
     /**
      * install
      *

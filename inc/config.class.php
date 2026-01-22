@@ -45,7 +45,7 @@ class PluginBorgbaseConfig extends CommonDBTM
     {
         if (!$withtemplate) {
             if ($item->getType() == 'Config') {
-                return 'Borgbase';
+                return self::createTabEntry('Borgbase');
             }
         }
         return '';
@@ -145,6 +145,11 @@ class PluginBorgbaseConfig extends CommonDBTM
         }
 
         return $linkedRepos;
+    }
+
+    public static function getIcon()
+    {
+        return PLUGIN_BORGBASE_ICON;
     }
 
     /**

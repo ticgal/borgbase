@@ -60,7 +60,7 @@ class PluginBorgbaseBorgbase extends CommonDBTM
      */
     public static function getIcon(): string
     {
-        return 'fa-solid fa-hard-drive';
+        return PLUGIN_BORGBASE_ICON;
     }
 
     /**
@@ -70,7 +70,7 @@ class PluginBorgbaseBorgbase extends CommonDBTM
     {
         switch ($item::getType()) {
             case 'Computer':
-                return 'Borgbase';
+                return self::createTabEntry('Borgbase');
         }
         return '';
     }
