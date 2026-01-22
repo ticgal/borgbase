@@ -52,10 +52,10 @@ class PluginBorgbaseCron extends CommonDBTM
     /**
     * cronBorgbaseUpdate
     *
-    * @param  CronTask $task
+    * @param  CronTask|null $task for log (default NULL)
     * @return boolean
     */
-    public static function cronBorgbaseUpdate(CronTask $task = null): bool
+    public static function cronBorgbaseUpdate(?CronTask $task = null): bool
     {
         /** @var \DBmysql $DB */
         global $DB;

@@ -32,8 +32,8 @@
 use Glpi\Plugin\Hooks;
 
 define('PLUGIN_BORGBASE_VERSION', '1.1.6');
-define("PLUGIN_BORGBASE_MIN_GLPI_VERSION", "10.0.0");
-define("PLUGIN_BORGBASE_MAX_GLPI_VERSION", "10.0.99");
+define("PLUGIN_BORGBASE_MIN_GLPI_VERSION", "11.0");
+define("PLUGIN_BORGBASE_MAX_GLPI_VERSION", "12.0");
 
 /**
  * plugin_init_borgbase

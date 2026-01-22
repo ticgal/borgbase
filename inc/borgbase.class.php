@@ -116,7 +116,6 @@ class PluginBorgbaseBorgbase extends CommonDBTM
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $data = curl_exec($ch);
-                curl_close($ch);
 
                 //if (str_contains($data, 'errors')) {
                 //    echo '<td><span class="text-muted"><i class="fa-solid fa-xmark"></i> ' . __('Check API connection', 'borgbase') . '</span></td>';
