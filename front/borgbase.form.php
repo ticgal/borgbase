@@ -31,7 +31,7 @@
 
 $plugin = new Plugin();
 if (!$plugin->isInstalled('borgbase') || !$plugin->isActivated('borgbase')) {
-    Html::displayNotFoundError();
+    throw new Glpi\Exception\Http\NotFoundHttpException();
 }
 
 $borgbase = new PluginBorgbaseBorgbase();

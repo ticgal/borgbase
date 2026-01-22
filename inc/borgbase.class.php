@@ -810,11 +810,10 @@ class PluginBorgbaseBorgbase extends CommonDBTM
                 `currentUsage`  			VARCHAR(255) DEFAULT '0',
                 `date_creation`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`date_mod`                  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY  (`id`)
-            ) ENGINE=InnoDB
-                DEFAULT CHARSET={$default_charset}
-                COLLATE={$default_collation}";
-            $DB->doQueryOrDie($query, $DB->error());
+                PRIMARY KEY  (`id`),
+                KEY `computer_id` (`computer_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation}";
+            $DB->doQuery($query);
         }
     }
 

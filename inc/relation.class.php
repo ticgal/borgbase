@@ -70,10 +70,8 @@ class PluginBorgbaseRelation extends CommonDBRelation
                 KEY `items_id` (`items_id`),
                 KEY `itemtype` (`itemtype`,`items_id`),
                 KEY `plugin_borgbase_borgbases_id` (`plugin_borgbase_borgbases_id`)
-            ) ENGINE=InnoDB
-                DEFAULT CHARSET={$default_charset}
-                COLLATE={$default_collation}";
-            $DB->doQueryOrDie($query, $DB->error());
+            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation}";
+            $DB->doQuery($query);
         }
     }
 

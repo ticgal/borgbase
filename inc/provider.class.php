@@ -168,7 +168,7 @@ class PluginBorgbaseProvider
         /** @var \DBmysql $DB */
         global $DB;
 
-        $sub_query = new \QuerySubQuery([
+        $sub_query = new \Glpi\DBAL\QuerySubQuery([
             'SELECT' => 'items_id',
             'FROM'   => PluginBorgbaseRelation::getTable()
         ]);

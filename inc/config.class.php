@@ -172,9 +172,8 @@ class PluginBorgbaseConfig extends CommonDBTM
 				`match` tinyint(1) NOT NULL DEFAULT '0',
 				`debug` tinyint(1) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`id`)
-			)ENGINE=InnoDB DEFAULT CHARSET={$default_charset} 
-            COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->doQueryOrDie($query, $DB->error());
+			)ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+            $DB->doQuery($query);
 
             // Default config
             $DB->insert(
