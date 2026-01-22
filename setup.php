@@ -45,8 +45,6 @@ function plugin_init_borgbase(): void
     /** @var array $PLUGIN_HOOKS */
     global $PLUGIN_HOOKS;
 
-    $PLUGIN_HOOKS[Hooks::CSRF_COMPLIANT]['borgbase'] = true;
-
     $plugin = new Plugin();
     if ($plugin->isActivated('borgbase')) {
         Plugin::registerClass(
