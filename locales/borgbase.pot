@@ -1,7 +1,7 @@
 # BORGBASE Glpi Plugin.
-# Copyright (C) 2022 TICgal
+# Copyright (C) 2022 TICGAL
 # This file is distributed under the same license as the PACKAGE package.
-# TICgal, 2022
+# TICGAL, 2022
 #
 #, fuzzy
 msgid ""
