@@ -1,5 +1,9 @@
 # Borgbase - GLPI Plugin CHANGELOG
 
+## [2.0.0] - 2026-01-27
+### Features
+- GLPI 11 support
+
 ## [1.1.6] - 2025-01-29
 ### Fixed
 - Avoid losing data if the repository no longer exists in Borgbase
