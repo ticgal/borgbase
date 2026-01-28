@@ -98,6 +98,11 @@ class PluginBorgbaseConfig extends CommonDBTM
             $connect = true;
         }
 
+        $placeholder = '';
+        if (!empty($config->fields['apikey'])) {
+            $placeholder = str_repeat('*', 20);
+        }
+
         $templatePath = "@borgbase/config.html.twig";
         TemplateRenderer::getInstance()->display(
             $templatePath,
@@ -107,6 +112,7 @@ class PluginBorgbaseConfig extends CommonDBTM
                 'labels'        => $labels,
                 'msg'           => $msg,
                 'options'       => $options,
+                'placeholder'   => $placeholder
             ]
         );
 
@@ -145,6 +151,14 @@ class PluginBorgbaseConfig extends CommonDBTM
         }
 
         return $linkedRepos;
+    }
+
+    public function prepareInputForUpdate($input): false|array
+    {
+        if (isset($input['_blank_apikey']) && $input['_blank_apikey']) {
+            $input['apikey'] = '';
+        }
+        return $input;
     }
 
     public static function getIcon()
