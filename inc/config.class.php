@@ -3,7 +3,7 @@
 /**
  * -------------------------------------------------------------------------
  * Borgbase plugin for GLPI
- * Copyright (C) 2022-2024 by the TICgal Team.
+ * Copyright (C) 2022 - 2026 by the TICGAL Team.
  * https://www.tic.gal/
  * -------------------------------------------------------------------------
  * LICENSE
@@ -20,8 +20,8 @@
  * along with Borgbase. If not, see <http://www.gnu.org/licenses/>.
  * --------------------------------------------------------------------------
  * @package  Borgbase
- * @author    the TICgal team
- * @copyright Copyright (c) 2022-2024 TICgal team
+ * @author    the TICGAL team
+ * @copyright Copyright (C) 2022 - 2026 TICGAL team
  * @license   AGPL License 3.0 or (at your option) any later version
  * http://www.gnu.org/licenses/agpl-3.0-standalone.html
  * @link      https://www.tic.gal/
@@ -45,7 +45,7 @@ class PluginBorgbaseConfig extends CommonDBTM
     {
         if (!$withtemplate) {
             if ($item->getType() == 'Config') {
-                return 'Borgbase';
+                return self::createTabEntry('Borgbase');
             }
         }
         return '';
@@ -98,6 +98,11 @@ class PluginBorgbaseConfig extends CommonDBTM
             $connect = true;
         }
 
+        $placeholder = '';
+        if (!empty($config->fields['apikey'])) {
+            $placeholder = str_repeat('*', 20);
+        }
+
         $templatePath = "@borgbase/config.html.twig";
         TemplateRenderer::getInstance()->display(
             $templatePath,
@@ -107,6 +112,7 @@ class PluginBorgbaseConfig extends CommonDBTM
                 'labels'        => $labels,
                 'msg'           => $msg,
                 'options'       => $options,
+                'placeholder'   => $placeholder
             ]
         );
 
@@ -147,6 +153,19 @@ class PluginBorgbaseConfig extends CommonDBTM
         return $linkedRepos;
     }
 
+    public function prepareInputForUpdate($input): false|array
+    {
+        if (isset($input['_blank_apikey']) && $input['_blank_apikey']) {
+            $input['apikey'] = '';
+        }
+        return $input;
+    }
+
+    public static function getIcon()
+    {
+        return PLUGIN_BORGBASE_ICON;
+    }
+
     /**
      * install
      *
@@ -172,9 +191,8 @@ class PluginBorgbaseConfig extends CommonDBTM
 				`match` tinyint(1) NOT NULL DEFAULT '0',
 				`debug` tinyint(1) NOT NULL DEFAULT '0',
 				PRIMARY KEY (`id`)
-			)ENGINE=InnoDB DEFAULT CHARSET={$default_charset} 
-            COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
-            $DB->doQueryOrDie($query, $DB->error());
+			)ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+            $DB->doQuery($query);
 
             // Default config
             $DB->insert(

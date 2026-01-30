@@ -3,7 +3,7 @@
 /**
  * -------------------------------------------------------------------------
  * Borgbase plugin for GLPI
- * Copyright (C) 2022-2024 by the TICgal Team.
+ * Copyright (C) 2022 - 2026 by the TICGAL Team.
  * https://www.tic.gal/
  * -------------------------------------------------------------------------
  * LICENSE
@@ -20,8 +20,8 @@
  * along with Borgbase. If not, see <http://www.gnu.org/licenses/>.
  * --------------------------------------------------------------------------
  * @package  Borgbase
- * @author    the TICgal team
- * @copyright Copyright (c) 2022-2024 TICgal team
+ * @author    the TICGAL team
+ * @copyright Copyright (C) 2022 - 2026 TICGAL team
  * @license   AGPL License 3.0 or (at your option) any later version
  * http://www.gnu.org/licenses/agpl-3.0-standalone.html
  * @link      https://www.tic.gal/
@@ -70,10 +70,8 @@ class PluginBorgbaseRelation extends CommonDBRelation
                 KEY `items_id` (`items_id`),
                 KEY `itemtype` (`itemtype`,`items_id`),
                 KEY `plugin_borgbase_borgbases_id` (`plugin_borgbase_borgbases_id`)
-            ) ENGINE=InnoDB
-                DEFAULT CHARSET={$default_charset}
-                COLLATE={$default_collation}";
-            $DB->doQueryOrDie($query, $DB->error());
+            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation}";
+            $DB->doQuery($query);
         }
     }
 

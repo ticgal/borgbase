@@ -1,7 +1,7 @@
 {#
 # -------------------------------------------------------------------------
 # Borgbase plugin for GLPI
-# Copyright (C) 2022-2024 by the TICgal Team.
+# Copyright (C) 2022 - 2026 by the TICGAL Team.
 # https://www.tic.gal/
 # -------------------------------------------------------------------------
 # LICENSE
@@ -18,8 +18,8 @@
 # along with Borgbase. If not, see <http: //www.gnu.org/licenses />.
 # --------------------------------------------------------------------------
 # @package Borgbase
-# @author the TICgal team
-# @copyright Copyright (c) 2022-2024 TICgal team
+# @author the TICGAL team
+# @copyright Copyright (C) 2022 - 2026 TICGAL team
 # @license AGPL License 3.0 or (at your option) any later version
 # http://www.gnu.org/licenses/agpl-3.0-standalone.html
 # @link https://www.tic.gal/
@@ -45,46 +45,46 @@
         <div class="row ps-4">
 
             {% if item.isField('server') %}
-            {{ fields.textField(
-            'server',
-            item.fields['server'],
-            labels['server'],
-            options
-            ) }}
+                {{ fields.textField(
+                    'server',
+                    item.fields['server'],
+                    labels['server'],
+                    options
+                ) }}
             {% endif %}
 
             {% if item.isField('apikey') %}
-            {{ fields.passwordField(
-            'apikey',
-            item.fields['apikey'],
-            labels['apikey'],
-            options
-            ) }}
+                {{ fields.passwordField(
+                    'apikey',
+                    '',
+                    labels['apikey'],
+                    options|merge({additional_attributes: {'placeholder': placeholder}}),
+                ) }}
             {% endif %}
 
             {% if connection %}
-            {{ fields.htmlField(
-            'connection',
-            msg,
-            ''
-            ) }}
+                {{ fields.htmlField(
+                    'connection',
+                    msg,
+                    ''
+                ) }}
 
-            <div class="form-field row col-6 mb-2 pe-0 justify-content-end align-items-center">
-                <button class="btn w-auto" type="submit" name="reload" value="1">
-                    <i class="fa-solid fa-rotate"></i>
-                    <span>{{ _x('button', labels['reload']) }}</span>
-                </button>
-            </div>
+                <div class="form-field row col-6 mb-2 pe-0 justify-content-end align-items-center">
+                    <button class="btn w-auto" type="submit" name="reload" value="1">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>{{ _x('button', labels['reload']) }}</span>
+                    </button>
+                </div>
             {% endif %}
 
             {% if item.isField('match') %}
-            {{
-            fields.dropdownYesNo(
-            'match',
-            item.fields['match'],
-            labels['match'],
-            options
-            ) }}
+                {{
+                    fields.dropdownYesNo(
+                    'match',
+                    item.fields['match'],
+                    labels['match'],
+                    options
+                ) }}
             {% endif %}
 
         </div>

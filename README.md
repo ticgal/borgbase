@@ -4,8 +4,8 @@
 [Borgbase](https://www.borgbase.com/) integration for GLPI
 
 [![License](https://img.shields.io/badge/License-GNU%20AGPLv3-blue.svg)](https://github.com/ticgal/borgbase/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/badge/Twitter-TICgal-blue.svg)](https://twitter.com/ticgalcom)
-[![TICGAL](https://img.shields.io/badge/Web-TICgal-blue.svg)](https://tic.gal/)
+[![Twitter](https://img.shields.io/badge/Twitter-TICGAL-blue.svg)](https://twitter.com/ticgalcom)
+[![TICGAL](https://img.shields.io/badge/Web-TICGAL-blue.svg)](https://tic.gal/)
 [![Localazy](https://img.shields.io/badge/Translate-Localazy-cyan)](https://localazy.com/p/borgbase#translations)
 
 ## Supported versions
