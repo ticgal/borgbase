@@ -3,7 +3,7 @@
 /**
  * -------------------------------------------------------------------------
  * Borgbase plugin for GLPI
- * Copyright (C) 2022-2024 by the TICgal Team.
+ * Copyright (C) 2022 - 2026 by the TICGAL Team.
  * https://www.tic.gal/
  * -------------------------------------------------------------------------
  * LICENSE
@@ -20,8 +20,8 @@
  * along with Borgbase. If not, see <http://www.gnu.org/licenses/>.
  * --------------------------------------------------------------------------
  * @package  Borgbase
- * @author    the TICgal team
- * @copyright Copyright (c) 2022-2024 TICgal team
+ * @author    the TICGAL team
+ * @copyright Copyright (C) 2022 - 2026 TICGAL team
  * @license   AGPL License 3.0 or (at your option) any later version
  * http://www.gnu.org/licenses/agpl-3.0-standalone.html
  * @link      https://www.tic.gal/
@@ -60,7 +60,7 @@ class PluginBorgbaseBorgbase extends CommonDBTM
      */
     public static function getIcon(): string
     {
-        return 'fa-solid fa-hard-drive';
+        return PLUGIN_BORGBASE_ICON;
     }
 
     /**
@@ -70,7 +70,7 @@ class PluginBorgbaseBorgbase extends CommonDBTM
     {
         switch ($item::getType()) {
             case 'Computer':
-                return 'Borgbase';
+                return self::createTabEntry('Borgbase');
         }
         return '';
     }
@@ -116,7 +116,6 @@ class PluginBorgbaseBorgbase extends CommonDBTM
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 $data = curl_exec($ch);
-                curl_close($ch);
 
                 //if (str_contains($data, 'errors')) {
                 //    echo '<td><span class="text-muted"><i class="fa-solid fa-xmark"></i> ' . __('Check API connection', 'borgbase') . '</span></td>';
@@ -810,11 +809,10 @@ class PluginBorgbaseBorgbase extends CommonDBTM
                 `currentUsage`  			VARCHAR(255) DEFAULT '0',
                 `date_creation`             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`date_mod`                  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY  (`id`)
-            ) ENGINE=InnoDB
-                DEFAULT CHARSET={$default_charset}
-                COLLATE={$default_collation}";
-            $DB->doQueryOrDie($query, $DB->error());
+                PRIMARY KEY  (`id`),
+                KEY `computer_id` (`computer_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation}";
+            $DB->doQuery($query);
         }
     }
 
