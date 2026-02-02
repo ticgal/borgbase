@@ -8,24 +8,21 @@
 [![TICGAL](https://img.shields.io/badge/Web-TICGAL-blue.svg)](https://tic.gal/)
 [![Localazy](https://img.shields.io/badge/Translate-Localazy-cyan)](https://localazy.com/p/borgbase#translations)
 
-## Supported versions
-- GLPI 10.0.x
-
 # Prerequisites
 
 You need a borgbase account. Get a 10 GB free account for life to test it here: https://www.borgbase.com/ 
 
 # How to configure it
 
-After plugin installation head to the GLPI configuration (Setup > General > Borgbase) and add the Borgbase API key. A read-only one is enough.
+After installing the plugin, go to the GLPI configuration (Setup > General > Borgbase) and add the Borgbase API key. A read-only one is enough.
 
 Configure the permissions of the profiles that will manage the plugin:
 - UPDATE: The user will be able to update the repository data manually.
-- CREATE: The user will be able to create links between computer and repository, if the name does not match.
+- CREATE: The user will be able to create links between the computer and the repository if the name does not match.
 - PURGE: The user will be able to delete manually created links.
 
 ## How to use it
 
-By default, if the computer name exactly matches the repository name in Borgbase, the relevant data is stored and can be reviewed in the tab of the computer itself.
+By default, if the computer name exactly matches the repository name in Borgbase, the relevant data is stored and can be reviewed in the computer's tab.
 
 Each computer will have a tab with its own Borgbase repository. It can be linked manually in case they do not match.
