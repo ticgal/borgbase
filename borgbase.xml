@@ -8,7 +8,7 @@
          <en>A Borgbase integration</en>
       </short>
       <long>
-         <en>Borgbase is a simple and secure offsite backup based on the opensource Backup utility Borg. Login into Borgbase has a couple of challenges: 1. There is only one user. 2. User has complete access to every area With the Borgbase GLPI integration we can: 1. Show relevant backup information: when the repo was last updated; how much space is using... 2. Get some:native Dashboard Widgets to track that information from GLPI.</en>
+         <en>Borgbase is a simple and secure off-site backup based on the open-source backup utility Borg. Logging into Borgbase has a couple of challenges: 1. There is only one user. 2. User has complete access to every area. With the Borgbase GLPI integration, we can: 1. Show relevant backup information: when the repo was last updated; how much space it is using... 2. Get some native Dashboard Widgets to track that information from GLPI.</en>
       </long>
    </description>
    <homepage>https://tic.gal/en/borgbase/</homepage>
