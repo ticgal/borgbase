@@ -1,21 +1,14 @@
 <root>
    <name>Borgbase</name>
    <key>borgbase</key>
-   <state>stable</state> <!-- stable | unstable | beta | alpha -->
+   <state>stable</state>
    <logo>https://raw.githubusercontent.com/ticgal/borgbase/multimedia/borgbase.png</logo>
    <description>
       <short>
-		<en>A Borgbase integration</en>
+         <en>A Borgbase integration</en>
       </short>
       <long>
-	      <en>Borgbase is a simple and secure offsite backup based on the opensource Backup utility Borg.
-Login into Borgbase has a couple of challenges: 
-1. There is only one user.
-2. User has complete access to every area
-With the Borgbase GLPI integration we can:
-1. Show relevant backup information: when the repo was last updated; how much space is using...
-2. Get some:native Dashboard Widgets to track that information from GLPI. 
-        </en>
+         <en>Borgbase is a simple and secure offsite backup based on the opensource Backup utility Borg. Login into Borgbase has a couple of challenges: 1. There is only one user. 2. User has complete access to every area With the Borgbase GLPI integration we can: 1. Show relevant backup information: when the repo was last updated; how much space is using... 2. Get some:native Dashboard Widgets to track that information from GLPI.</en>
       </long>
    </description>
    <homepage>https://tic.gal/en/borgbase/</homepage>
@@ -27,9 +20,9 @@ With the Borgbase GLPI integration we can:
    </authors>
    <versions>
       <version>
-        <num>1.0.0</num>
-        <compatibility>~10.0.0</compatibility>
-	<download_url>https://github.com/ticgal/borgbase/releases/download/1.0.0/glpi-borgbase-1.0.0.tar.tgz</download_url>      
+         <num>1.0.0</num>
+         <compatibility>~10.0.0</compatibility>
+         <download_url>https://github.com/ticgal/borgbase/releases/download/1.0.0/glpi-borgbase-1.0.0.tar.tgz</download_url>
       </version>
    </versions>
    <langs>
@@ -39,12 +32,12 @@ With the Borgbase GLPI integration we can:
    </langs>
    <license>AGPL v3+</license>
    <tags>
-      	<en>
-		<tag>Backup</tag>
-    		<tag>Inventory</tag>
-		<tag>Network</tag>
-		<tag>Integration</tag>
-	</en>
+      <en>
+         <tag>Backup</tag>
+         <tag>Inventory</tag>
+         <tag>Network</tag>
+         <tag>Integration</tag>
+      </en>
    </tags>
    <screenshots>
       <screenshot>https://raw.githubusercontent.com/ticgal/borgbase/multimedia/borgbase-glpi-plugin-1.png</screenshot>
