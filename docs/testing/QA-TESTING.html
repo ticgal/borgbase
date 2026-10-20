@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Borgbase 3.0.0 — QA checklist</title>
+<style>
+  body { font-family: sans-serif; font-size: 14px; margin: 1.5em; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 1.5em; }
+  th, td { border: 1px solid #999; padding: 4px 6px; vertical-align: top; text-align: left; }
+  th { background: #eee; }
+  td:nth-child(5), td:nth-child(6) { min-width: 6em; }
+</style>
+</head>
+<body>
+<!-- qa-testing-format: 1 -->
+<h1>Borgbase 3.0.0 — QA checklist (GLPI 12)</h1>
+
+<p><strong>How to fill in:</strong> mark <em>Result</em> with <code>OK</code> or <code>KO</code> only. Use <em>Comments</em>
+for the error message, a screenshot reference or a note on what went wrong.</p>
+
+<p><strong>Before starting:</strong> a BorgBase account with at least two repositories and a <strong>read-only</strong>
+API key; one GLPI computer whose name is exactly the name of one repository; one computer whose name matches none;
+three users: an administrator, a technician of another entity, and a user with read-only Borgbase rights.
+Every check below only <em>reads</em> the BorgBase account. Items marked <code>[live write]</code> create or delete
+records in GLPI; the <code>[destructive]</code> section at the end removes the plugin data.</p>
+
+<h2>Configuration and rights</h2>
+<table>
+<tr><th>#</th><th>Check</th><th>Steps</th><th>Expected</th><th>Result</th><th>Comments</th></tr>
+<tr><td>1</td><td>Configuration page asks for the password again</td><td>Log in as administrator, open Setup &gt; General &gt; Borgbase.</td><td>GLPI asks to confirm the password before showing the page.</td><td></td><td></td></tr>
+<tr><td>2</td><td>[live write] Save the API key</td><td>Enter the read-only API key, keep the default server, Save.</td><td>Page shows "Established connection". The key field stays empty (only asterisks as placeholder).</td><td></td><td></td></tr>
+<tr><td>3</td><td>[live write] Automatic linking on save</td><td>After saving the key, open the computer whose name matches a repository, Borgbase tab.</td><td>The repository data is shown (name, version, region, usage, dates).</td><td></td><td></td></tr>
+<tr><td>4</td><td>Server must be https</td><td>Change the server to <code>http://api.borgbase.com/graphql</code>, Save.</td><td>Error "The server endpoint must be a valid https URL"; nothing changes.</td><td></td><td></td></tr>
+<tr><td>5</td><td>[live write] Changing the server clears the key</td><td>Change the server to another https address without typing a key, Save. Then restore the default server and the key.</td><td>Warning asking to enter the key again; connection is no longer established until the key is entered again.</td><td></td><td></td></tr>
+<tr><td>6</td><td>[live write] Clear the saved key</td><td>Tick "Clear the saved key", Save. Then enter the key again.</td><td>After clearing, the connection message disappears; after entering the key again it is back.</td><td></td><td></td></tr>
+<tr><td>7</td><td>[live write] "Link repositories" button</td><td>On the configuration page click "Link repositories".</td><td>Message with the number of repositories linked.</td><td></td><td></td></tr>
+<tr><td>8</td><td>[live write] Rights in profiles</td><td>Administration &gt; Profiles &gt; Technician &gt; Borgbase tab: grant Read, Update, Create, Purge. Save.</td><td>Rights saved; tab shows the four boxes ticked.</td><td></td><td></td></tr>
+</table>
+
+<h2>Computer tab</h2>
+<table>
+<tr><th>#</th><th>Check</th><th>Steps</th><th>Expected</th><th>Result</th><th>Comments</th></tr>
+<tr><td>9</td><td>Linked repository data</td><td>Open the computer of check 3, Borgbase tab.</td><td>All fields filled; usage shown with unit (MB/GB/TB); "Reload information" and "Unlink repository" buttons.</td><td></td><td></td></tr>
+<tr><td>10</td><td>[live write] Reload</td><td>Click "Reload information".</td><td>Page reloads; "Last update on" date at the bottom changes.</td><td></td><td></td></tr>
+<tr><td>11</td><td>Unlink asks for confirmation</td><td>Click "Unlink repository", then Cancel in the dialog.</td><td>Nothing happens; repository still linked.</td><td></td><td></td></tr>
+<tr><td>12</td><td>[live write] Unlink</td><td>Click "Unlink repository", accept.</td><td>Tab shows "Not registered" and the repository dropdown; History tab of the computer shows the removal.</td><td></td><td></td></tr>
+<tr><td>13</td><td>Unlinked computer: repository list</td><td>Open the computer whose name matches no repository, Borgbase tab.</td><td>"Not registered", a dropdown with the repositories not linked to any computer, and a "Link repository" button.</td><td></td><td></td></tr>
+<tr><td>14</td><td>[live write] Manual link</td><td>Choose a repository in the dropdown, click "Link repository".</td><td>Repository data is shown; History tab of the computer shows the link and the user.</td><td></td><td></td></tr>
+<tr><td>15</td><td>No double link</td><td>On another unlinked computer, open the tab: the repository of check 14 is not in the list.</td><td>Repositories already linked to a computer are never offered.</td><td></td><td></td></tr>
+<tr><td>16</td><td>Read-only user</td><td>Log in as the read-only user, open a linked computer, Borgbase tab.</td><td>Data visible, no Reload/Unlink buttons; on an unlinked computer no dropdown or Link button.</td><td></td><td></td></tr>
+<tr><td>17</td><td>User without the right</td><td>Remove the Borgbase right from the read-only user's profile, open a computer.</td><td>No Borgbase tab. Restore the right afterwards.</td><td></td><td></td></tr>
+<tr><td>18</td><td>Other entity</td><td>Log in as the technician of another entity, open a computer of their own entity.</td><td>Only computers of their entity are visible; their tab works as in checks 9–14.</td><td></td><td></td></tr>
+</table>
+
+<h2>Search, dashboard and automatic action</h2>
+<table>
+<tr><th>#</th><th>Check</th><th>Steps</th><th>Expected</th><th>Result</th><th>Comments</th></tr>
+<tr><td>19</td><td>Search columns</td><td>Assets &gt; Computers, add the Borgbase columns (Repository Name, Creation Date, Last Modification, Encrypted, Current Usage, Alert Days); search Repository Name contains a repository name.</td><td>Matching computers listed with the repository data; usage with unit.</td><td></td><td></td></tr>
+<tr><td>20</td><td>[live write] Dashboard cards</td><td>On a dashboard, add the five "Borgbase" cards.</td><td>Usage history chart, used quota donut, number of repositories, current use and number of computers with a repository linked, all with values.</td><td></td><td></td></tr>
+<tr><td>21</td><td>Dashboard card per entity</td><td>As the technician of another entity, view a dashboard with "Number of Computers with a Repo Linked".</td><td>Counts only the computers of their entities.</td><td></td><td></td></tr>
+<tr><td>22</td><td>[live write] Automatic action</td><td>Setup &gt; Automatic actions &gt; borgbaseUpdate &gt; Execute.</td><td>Ends without error; the "Last update on" date of linked computers changes.</td><td></td><td></td></tr>
+<tr><td>23</td><td>API unavailable</td><td>Set an https server address that does not answer (e.g. <code>https://192.0.2.1/graphql</code>), open a computer tab and the dashboard. Restore the server and key afterwards.</td><td>Pages load (after a few seconds at most), configuration shows "Check API connection"; no error page.</td><td></td><td></td></tr>
+</table>
+
+<h2>Destructive</h2>
+<table>
+<tr><th>#</th><th>Check</th><th>Steps</th><th>Expected</th><th>Result</th><th>Comments</th></tr>
+<tr><td>24</td><td>[destructive] Uninstall removes the plugin data</td><td>Setup &gt; Plugins: uninstall Borgbase, then install and enable it again.</td><td>After reinstalling, the configuration is back to defaults (no key) and no computer has a linked repository.</td><td></td><td></td></tr>
+</table>
+
+<h2>Known limitations</h2>
+<ul>
+  <li>Opening the Borgbase tab of an unlinked computer links it automatically when its name matches a repository and
+      the "Computer name matches exactly with repository name" option is enabled. This is by design.</li>
+  <li>The plugin uses one BorgBase account for the whole GLPI instance: the repository list and the account usage
+      cards are the same in every entity.</li>
+  <li>A BorgBase endpoint on a private network address requires an entry in GLPI's <code>config/local_define.php</code>
+      (see README); without it the connection is reported as failed.</li>
+  <li>New Borgbase rights are not granted to any profile on install; an administrator has to grant them (check 8).</li>
+</ul>
+</body>
+</html>

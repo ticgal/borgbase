@@ -30,44 +30,9 @@
  */
 
 /**
- * Cron
+ * @deprecated Legacy class name kept for other plugins. Use \GlpiPlugin\Borgbase\Cron instead.
  */
-class PluginBorgbaseCron extends CommonDBTM
-{
-    /**
-    * cronInfo
-    *
-    * @param  string $name
-    * @return array
-    */
-    public static function cronInfo($name): array
-    {
-        switch ($name) {
-            case 'borgbaseUpdate':
-                return ['description' => __('Update borgbase records', 'borgbase')];
-        }
-        return array();
-    }
 
-    /**
-    * cronBorgbaseUpdate
-    *
-    * @param  CronTask|null $task for log (default NULL)
-    * @return boolean
-    */
-    public static function cronBorgbaseUpdate(?CronTask $task = null): bool
-    {
-        /** @var \DBmysql $DB */
-        global $DB;
+require_once __DIR__ . '/../src/Cron.php';
 
-        $borgbase = new PluginBorgbaseBorgbase();
-        $table = PluginBorgbaseBorgbase::getTable();
-        foreach ($DB->request(['SELECT' => 'borg_id', 'FROM' => $table]) as $id => $row) {
-            if ($borgbase->reloadRepo($row['borg_id'])) {
-                $task->addVolume(1);
-            }
-        }
-
-        return true;
-    }
-}
+class_alias(\GlpiPlugin\Borgbase\Cron::class, 'PluginBorgbaseCron');

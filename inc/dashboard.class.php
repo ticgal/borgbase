@@ -30,62 +30,9 @@
  */
 
 /**
- * Dashboard
+ * @deprecated Legacy class name kept for other plugins. Use \GlpiPlugin\Borgbase\Dashboard instead.
  */
-class PluginBorgbaseDashboard
-{
-    /**
-     * dashboardCards
-     *
-     * @param  array|null $cards
-     * @return array
-     */
-    public static function dashboardCards(?array $cards): array
-    {
-        if (is_null($cards)) {
-            $cards = [];
-        }
 
-        $cards['plugin_borgbase_usagehistory'] = [
-            'widgettype'    => ['bar', 'line'],
-            'label'         => __('Usage History', 'borgbase'),
-            'group'         => 'Borgbase',
-            'filters'       => ['dates'],
-            'provider'      => PluginBorgbaseProvider::class . '::usageHistory'
-        ];
+require_once __DIR__ . '/../src/Dashboard.php';
 
-        $cards['plugin_borgbase_usedquotapercentage'] = [
-            'widgettype'    => ['donut', 'pie', 'halfdonut', 'halfpie'],
-            'label'         => __('Used Quota', 'borgbase'),
-            'group'         => 'Borgbase',
-            'filters'       => [],
-            'provider'      => PluginBorgbaseProvider::class . '::usageQuotaPer'
-        ];
-
-        $cards['plugin_borgbase_numberrepositories'] = [
-            'widgettype'    => ['bigNumber'],
-            'label'         => __('Number of Repositories', 'borgbase'),
-            'group'         => 'Borgbase',
-            'filters'       => [],
-            'provider'      => PluginBorgbaseProvider::class . '::numberrepositories'
-        ];
-
-        $cards['plugin_borgbase_currentuse'] = [
-            'widgettype'    => ['bigNumber'],
-            'label'         => __('Current Use', 'borgbase'),
-            'group'         => 'Borgbase',
-            'filters'       => [],
-            'provider'      => PluginBorgbaseProvider::class . '::currentuse'
-        ];
-
-        $cards['plugin_borgbase_numberoflinkedrepositories'] = [
-            'widgettype'    => ['bigNumber'],
-            'label'         => __('Number of Computers with a Repo Linked', 'borgbase'),
-            'group'         => 'Borgbase',
-            'filters'       => [],
-            'provider'      => PluginBorgbaseProvider::class . '::numberoflinkedrepositories'
-        ];
-
-        return $cards;
-    }
-}
+class_alias(\GlpiPlugin\Borgbase\Dashboard::class, 'PluginBorgbaseDashboard');

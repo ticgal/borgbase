@@ -29,6 +29,28 @@
  * ----------------------------------------------------------------------
  */
 
+use GlpiPlugin\Borgbase\Borgbase;
+use GlpiPlugin\Borgbase\Config;
+use GlpiPlugin\Borgbase\Cron;
+use GlpiPlugin\Borgbase\Profile;
+use GlpiPlugin\Borgbase\Relation;
+
+/**
+ * Plugin classes with install/uninstall steps, in install order
+ *
+ * @return array<class-string>
+ */
+function plugin_borgbase_classes(): array
+{
+    return [
+        Config::class,
+        Borgbase::class,
+        Relation::class,
+        Profile::class,
+        Cron::class,
+    ];
+}
+
 /**
  * Plugin install process
  *
@@ -36,20 +58,29 @@
  */
 function plugin_borgbase_install(): bool
 {
+    /** @var \DBmysql $DB */
+    global $DB;
+
     $migration = new Migration(PLUGIN_BORGBASE_VERSION);
 
-    // Parse inc directory
-    foreach (glob(dirname(__FILE__) . '/inc/*') as $filepath) {
-        // Load *.class.php files and get the class name
-        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
-            $classname = 'PluginBorgbase' . ucfirst($matches[1]);
-            include_once $filepath;
-            // If the install method exists, load it
-            if (method_exists($classname, 'install')) {
-                $classname::install($migration);
+    // Up to 2.x the classes lived in inc/ (PluginBorgbaseX): the itemtype stored
+    // in glpi_crontasks, glpi_logs... is now the namespaced class name.
+    foreach (plugin_borgbase_classes() as $classname) {
+        $legacy = 'PluginBorgbase' . substr($classname, strrpos($classname, '\\') + 1);
+        // Interrupted upgrade: legacy rows would break the unicity keys
+        foreach (['glpi_crontasks', 'glpi_displaypreferences'] as $table) {
+            if (countElementsInTable($table, ['itemtype' => $classname]) > 0) {
+                $DB->delete($table, ['itemtype' => $legacy]);
             }
         }
+        $migration->renameItemtype($legacy, $classname, false);
     }
+
+    foreach (plugin_borgbase_classes() as $classname) {
+        $classname::install($migration);
+    }
+
+    $migration->executeMigration();
 
     return true;
 }
@@ -63,18 +94,10 @@ function plugin_borgbase_uninstall(): bool
 {
     $migration = new Migration(PLUGIN_BORGBASE_VERSION);
 
-    // Parse inc directory
-    foreach (glob(dirname(__FILE__) . '/inc/*') as $filepath) {
-        // Load *.class.php files and get the class name
-        if (preg_match("/inc.(.+)\.class.php/", $filepath, $matches)) {
-            $classname = 'PluginBorgbase' . ucfirst($matches[1]);
-            include_once $filepath;
-            // If the install method exists, load it
-            if (method_exists($classname, 'uninstall')) {
-                $classname::uninstall($migration);
-            }
-        }
+    foreach (array_reverse(plugin_borgbase_classes()) as $classname) {
+        $classname::uninstall($migration);
     }
+
     return true;
 }
 
@@ -86,5 +109,5 @@ function plugin_borgbase_uninstall(): bool
  */
 function plugin_borgbase_getAddSearchOptions($itemtype): array
 {
-    return PluginBorgbaseBorgbase::getAddSearchOptions($itemtype);
+    return Borgbase::getAddSearchOptions($itemtype);
 }

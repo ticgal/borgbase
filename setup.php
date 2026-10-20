@@ -30,11 +30,15 @@
  */
 
 use Glpi\Plugin\Hooks;
+use GlpiPlugin\Borgbase\Borgbase;
+use GlpiPlugin\Borgbase\Config;
+use GlpiPlugin\Borgbase\Dashboard;
+use GlpiPlugin\Borgbase\Profile;
 
-define('PLUGIN_BORGBASE_VERSION', '2.0.0');
-define("PLUGIN_BORGBASE_MIN_GLPI_VERSION", "11.0");
-define("PLUGIN_BORGBASE_MAX_GLPI_VERSION", "12.0");
-define("PLUGIN_BORGBASE_ICON", "fa-solid fa-hard-drive");
+define('PLUGIN_BORGBASE_VERSION', '3.0.0-beta.1');
+define("PLUGIN_BORGBASE_MIN_GLPI_VERSION", "12.0.0");
+define("PLUGIN_BORGBASE_MAX_GLPI_VERSION", "12.1.0");
+define("PLUGIN_BORGBASE_ICON", "ti ti-cloud-upload");
 
 /**
  * plugin_init_borgbase
@@ -46,59 +50,18 @@ function plugin_init_borgbase(): void
     /** @var array $PLUGIN_HOOKS */
     global $PLUGIN_HOOKS;
 
-    $plugin = new Plugin();
-    if ($plugin->isActivated('borgbase')) {
-        Plugin::registerClass(
-            PluginBorgbaseConfig::class,
-            [
-                'addtabon' => [
-                    'Config',
-                ]
-            ]
-        );
-        if (Session::haveRight(PluginBorgbaseBorgbase::$rightname, READ)) {
-            Plugin::registerClass(
-                PluginBorgbaseBorgbase::class,
-                [
-                    'addtabon' => [
-                        'Computer',
-                    ]
-                ]
-            );
-        }
-        Plugin::registerClass(
-            PluginBorgbaseRelation::class,
-            [
-                'addtabon' => [
-                    'Computer',
-                ]
-            ]
-        );
-        Plugin::registerClass(
-            PluginBorgbaseProfile::class,
-            [
-                'addtabon' => [
-                    'Profile',
-                ]
-            ]
-        );
-
-        CronTask::register(
-            PluginBorgbaseCron::class,
-            'borgbaseUpdate',
-            DAY_TIMESTAMP,
-            [
-                'comment' => '',
-                'mode' => CronTask::MODE_EXTERNAL
-            ]
-        );
-
-        // Config page
-        if (Session::haveRight('config', UPDATE)) {
-            $PLUGIN_HOOKS['config_page']['borgbase'] = 'front/config.form.php';
-        }
-        $PLUGIN_HOOKS['dashboard_cards']['borgbase'] = ['PluginBorgbaseDashboard', 'dashboardCards'];
+    if (!Plugin::isPluginActive('borgbase')) {
+        return;
     }
+
+    Plugin::registerClass(Config::class, ['addtabon' => ['Config']]);
+    Plugin::registerClass(Borgbase::class, ['addtabon' => ['Computer']]);
+    Plugin::registerClass(Profile::class, ['addtabon' => ['Profile']]);
+
+    if (Session::haveRight('config', UPDATE)) {
+        $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['borgbase'] = 'front/config.form.php';
+    }
+    $PLUGIN_HOOKS[Hooks::DASHBOARD_CARDS]['borgbase'] = [Dashboard::class, 'dashboardCards'];
 }
 
 /**

@@ -29,146 +29,48 @@
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
 
-{% set no_header = no_header|default(not item.isNewItem() and not _get._in_modal|default(false)) %}
-{% set bg = '' %}
-{% if item.isDeleted() %}
-{% set bg = 'asset-deleted' %}
-{% endif %}
+<div class="asset">
+    <form method="post" action="{{ action }}" data-submit-once>
+        <input type="hidden" name="repoId" value="{{ data['borg_id'] }}" />
+        <input type="hidden" name="computerId" value="{{ value }}" />
 
-<div class="asset {{ bg }}">
-    {{ include('components/form/header.html.twig', {'in_twig': true, 'no_header': true}) }}
-
-    {% set params = params ?? [] %}
-    {% set field_options = {
-    'locked_fields': item.getLockedFields(),
-    } %}
-
-    <div class="row">
-        <div class="row ps-4">
-
-            {% set field_options = field_options|merge(params) %}
-
-            {% if item.isField('borg_name') %}
-            {{ fields.textField(
-            'borg_name',
-            data['borg_name'],
-            labels['name'],
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('alertDays') %}
-            {{ fields.textField(
-            'alertDays',
-            data['alertDays'],
-            labels['alertDays'],
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('borg_version') %}
-            {{ fields.textField(
-            'borg_version',
-            data['borg_version'],
-            labels['version'],
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('compactionInterval') %}
-            {{ fields.textField(
-            'compactionInterval',
-            data['formatCompactionInterval'],
-            labels['compactionInterval'],
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('region') %}
-            {{ fields.textField(
-            'region',
-            data['region'],
-            labels['region'],
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('compactionHour') %}
-            {{ fields.textField(
-            'compactionHour',
-            data['formatCompactionHour'],
-            __('Compaction Hour', 'borgbase'),
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('is_encrypted') %}
-            {{ fields.textField(
-            'is_encrypted',
-            data['is_encrypted'],
-            labels['encryption'],
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('currentUsage') %}
-            {{ fields.textField(
-            'currentUsage',
-            data['formatCurrentUsage'],
-            labels['usage'],
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('createdAt') %}
-            {{ fields.textField(
-            'createdAt',
-            data['formatCreatedAt'],
-            labels['createdAt'],
-            field_options
-            ) }}
-            {% endif %}
-
-            {% if item.isField('lastModified') %}
-            {{ fields.textField(
-            'lastModified',
-            data['formatLastModified'],
-            labels['lastBackup'],
-            field_options
-            ) }}
-            {% endif %}
-
-            <input type="hidden" name="repoId" value="{{ data['borg_id'] }}" />
-            <input type="hidden" name="computerId" value="{{ value }}" />
-            <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}" />
-
+        <div class="row">
+            <div class="row ps-4">
+                {{ fields.readOnlyField('borg_name', data['borg_name'], labels['name']) }}
+                {{ fields.readOnlyField('alertDays', data['alertDays'], labels['alertDays']) }}
+                {{ fields.readOnlyField('borg_version', data['borg_version'], labels['version']) }}
+                {{ fields.readOnlyField('compactionInterval', data['formatCompactionInterval'], labels['compactionInterval']) }}
+                {{ fields.readOnlyField('region', data['region'], labels['region']) }}
+                {{ fields.readOnlyField('compactionHour', data['formatCompactionHour'], labels['compactionHour']) }}
+                {{ fields.readOnlyField('is_encrypted', data['is_encrypted'], labels['encryption']) }}
+                {{ fields.readOnlyField('currentUsage', data['formatCurrentUsage'], labels['usage']) }}
+                {{ fields.readOnlyField('createdAt', data['formatCreatedAt'], labels['createdAt']) }}
+                {{ fields.readOnlyField('lastModified', data['formatLastModified'], labels['lastBackup']) }}
+            </div>
         </div>
-    </div> 
 
-<div class="card-body mx-n2 mb-4 border-top d-flex flex-row-reverse align-items-start flex-wrap">
+        <div class="card-body mx-n2 mb-4 border-top d-flex flex-row-reverse align-items-start flex-wrap">
+            {% if canPurge %}
+                <button class="btn btn-danger me-2" type="submit" name="unlink" value="1"
+                    onclick="return confirm('{{ labels['confirmDeletion']|e('js') }}');">
+                    <i class="ti ti-unlink"></i>
+                    <span>{{ labels['unlink'] }}</span>
+                </button>
+            {% endif %}
 
-    {% if canPurge %}
-    <button class="btn btn-danger me-2" type="submit" name="unlink" value="1"
-        onclick="return confirm('{{ labels.confirmDeletion }}');">
-        <i class="fa-solid fa-link-slash"></i>
-        <span>{{ _x('button', labels['unlink']) }}</span>
-    </button>
-    {% endif %}
+            {% if canUpdate %}
+                <button class="btn btn-primary me-2" type="submit" name="reload" value="1">
+                    <i class="ti ti-refresh"></i>
+                    <span>{{ labels['reload'] }}</span>
+                </button>
+            {% endif %}
+        </div>
+    </form>
 
-    {% if canUpdate %}
-    <button class="btn btn-primary me-2" type="submit" name="reload" value="1">
-        <i class="fa-solid fa-rotate"></i>
-        <span>{{ _x('button', labels['reload']) }}</span>
-    </button>
-    {% endif %}
-
-</div>
-</form>
-</div>
-
-<div class="card-footer mx-n2 mb-n2 mt-2">
-    <div class="row">
-        <div class="col-sm-6 col-12">{{ data['footerDateCreation'] }}</div>
-        <div class="col-sm-6 col-12">{{ data['footerDateMod'] }}</div>
+    <div class="card-footer mx-n2 mb-n2 mt-2">
+        <div class="row">
+            <div class="col-sm-6 col-12">{{ data['footerDateCreation'] }}</div>
+            <div class="col-sm-6 col-12">{{ data['footerDateMod'] }}</div>
+        </div>
     </div>
 </div>

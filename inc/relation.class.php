@@ -30,64 +30,9 @@
  */
 
 /**
- * Borgbase Relation
+ * @deprecated Legacy class name kept for other plugins. Use \GlpiPlugin\Borgbase\Relation instead.
  */
-class PluginBorgbaseRelation extends CommonDBRelation
-{
-    /**
-     * {@inheritDoc}
-     */
-    public static function getTypeName($nb = 0): string
-    {
-        return 'Borgbase Relation';
-    }
 
-    /**
-     * install
-     *
-     * @param  Migration $migration
-     * @return void
-     */
-    public static function install(Migration $migration): void
-    {
-        /** @var \DBmysql $DB */
-        global $DB;
+require_once __DIR__ . '/../src/Relation.php';
 
-        $default_charset = DBConnection::getDefaultCharset();
-        $default_collation = DBConnection::getDefaultCollation();
-        $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
-
-        $table = (new DbUtils())->getTableForItemtype('PluginBorgbaseRelation');
-        if (!$DB->tableExists($table)) {
-            $migration->displayMessage("Installing $table");
-
-            $query = "CREATE TABLE `$table` (
-                `id`         				    INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
-                `items_id`                      INT {$default_key_sign} NOT NULL DEFAULT '0',
-                `itemtype`                      VARCHAR(255) DEFAULT NULL,
-                `plugin_borgbase_borgbases_id`  INT {$default_key_sign} NOT NULL DEFAULT '0',
-                PRIMARY KEY  (`id`),
-                KEY `items_id` (`items_id`),
-                KEY `itemtype` (`itemtype`,`items_id`),
-                KEY `plugin_borgbase_borgbases_id` (`plugin_borgbase_borgbases_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation}";
-            $DB->doQuery($query);
-        }
-    }
-
-    /**
-     * uninstall
-     *
-     * @param  Migration $migration
-     * @return void
-     */
-    public static function uninstall(Migration $migration): void
-    {
-        /** @var \DBmysql $DB */
-        global $DB;
-
-        $table = self::getTable();
-        //$migration->displayMessage('Uninstalling ' . $table);
-        //$DB->queryOrDie("DROP TABLE `$table`", $DB->error());
-    }
-}
+class_alias(\GlpiPlugin\Borgbase\Relation::class, 'PluginBorgbaseRelation');
