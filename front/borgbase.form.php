@@ -29,66 +29,78 @@
  * ----------------------------------------------------------------------
  */
 
-$plugin = new Plugin();
-if (!$plugin->isInstalled('borgbase') || !$plugin->isActivated('borgbase')) {
-    throw new Glpi\Exception\Http\NotFoundHttpException();
+use Glpi\Exception\Http\AccessDeniedHttpException;
+use Glpi\Exception\Http\BadRequestHttpException;
+use Glpi\Exception\Http\NotFoundHttpException;
+
+if (!Plugin::isPluginActive('borgbase')) {
+    throw new NotFoundHttpException();
+}
+
+$actions = [
+    'reload' => UPDATE,
+    'unlink' => PURGE,
+    'assoc'  => CREATE,
+];
+$action = null;
+foreach (array_keys($actions) as $name) {
+    if (isset($_POST[$name])) {
+        $action = $name;
+        break;
+    }
+}
+if ($action === null) {
+    Html::back();
+}
+
+Session::checkRight(PluginBorgbaseBorgbase::$rightname, $actions[$action]);
+
+// The computer must exist and be editable by the user (entity): every action
+// writes its link data or its history
+$computerId = (int) ($action === 'assoc' ? ($_POST['id'] ?? 0) : ($_POST['computerId'] ?? 0));
+$computer = new Computer();
+if ($computerId <= 0 || !$computer->getFromDB($computerId)) {
+    throw new NotFoundHttpException();
+}
+if (!$computer->can($computerId, UPDATE)) {
+    throw new AccessDeniedHttpException();
+}
+
+$repoId = $_POST['repoId'] ?? null;
+if (!PluginBorgbaseBorgbase::isValidRepoId($repoId)) {
+    throw new BadRequestHttpException();
 }
 
 $borgbase = new PluginBorgbaseBorgbase();
+$historyText = sprintf(__('%2$s, by user %1$s'), $_SESSION['glpiname'], $repoId);
 
-if (isset($_POST['reload'])) {
-    if (Session::haveRight(PluginBorgbaseBorgbase::$rightname, UPDATE)) {
-        $computerId = $_POST['computerId'];
-        $repoId = $_POST['repoId'];
-        $borgbase->reloadRepo($repoId);
-    }
-    Html::back();
-} elseif (isset($_POST['unlink'])) {
-    if (Session::haveRight(PluginBorgbaseBorgbase::$rightname, PURGE)) {
-        $computerId = $_POST['computerId'];
-        $repoId = $_POST['repoId'];
-        $unlink = $borgbase->unlinkRepo($computerId, $repoId);
-        if ($unlink) {
-            $changes[0] = $computerId;
-            $changes[1] = sprintf(__('%2$s, by user %1$s'), $_SESSION["glpiname"], $repoId);
-            $changes[2] = "";
-
-            Log::history(
-                $computerId,
-                'Computer',
-                $changes,
-                'PluginBorgbaseBorgbase',
-                Log::HISTORY_DEL_RELATION
-            );
+switch ($action) {
+    case 'reload':
+        if ($borgbase->getComputerLink($computerId, $repoId) === null) {
+            throw new NotFoundHttpException();
         }
-    }
-    Html::back();
-}
+        if (!$borgbase->reloadRepo($repoId)) {
+            Session::addMessageAfterRedirect(__('Check API connection', 'borgbase'), false, ERROR);
+        }
+        break;
 
-if (isset($_POST['assoc']) && Session::haveRight(PluginBorgbaseBorgbase::$rightname, CREATE)) {
-    $computerId = isset($_POST['id']) ? intval($_POST['id']) : -1;
-    $repoId = $_POST['repoId'];
+    case 'unlink':
+        if (!$borgbase->unlinkRepo($computerId, $repoId)) {
+            throw new NotFoundHttpException();
+        }
+        PluginBorgbaseBorgbase::logHistory($computerId, Log::HISTORY_DEL_RELATION, $historyText);
+        break;
 
-    if ($computerId === -1) {
-        Html::back();
-    }
-
-    $repo = $borgbase->getRepo($repoId);
-    $linked = $borgbase->linkRepo($repo, $computerId);
-    if ($linked) {
-        $changes[0] = $computerId;
-        $changes[1] = "";
-        $changes[2] = sprintf(__('%2$s, by user %1$s'), $_SESSION["glpiname"], $repoId);
-
-        Log::history(
-            $computerId,
-            'Computer',
-            $changes,
-            'PluginBorgbaseBorgbase',
-            Log::HISTORY_ADD_RELATION
-        );
-    }
-    Html::back();
+    case 'assoc':
+        $repo = $borgbase->getRepo($repoId);
+        if ($repo === []) {
+            Session::addMessageAfterRedirect(__('Repository not found', 'borgbase'), false, ERROR);
+        } elseif ($borgbase->linkRepo($repo, $computerId)) {
+            PluginBorgbaseBorgbase::logHistory($computerId, Log::HISTORY_ADD_RELATION, $historyText);
+        } else {
+            Session::addMessageAfterRedirect(__('The repository or the computer is already linked', 'borgbase'), false, ERROR);
+        }
+        break;
 }
 
 Html::back();

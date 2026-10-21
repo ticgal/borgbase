@@ -1,5 +1,27 @@
 # Borgbase - GLPI Plugin CHANGELOG
 
+## [2.0.1] - 2026-10-09
+### Security
+- API queries no longer concatenate the computer name or the repository id: GraphQL variables are used and repository
+  ids are validated (a crafted computer name could send arbitrary GraphQL to the BorgBase account)
+- Linking, reloading and unlinking repositories require the update right on the computer (entity) and check that the
+  repository belongs to it; missing rights now return an error instead of being silently ignored
+- The server endpoint must be an https URL; changing it clears the saved authentication key. API calls only use https,
+  never follow redirects and have a timeout
+- Only the server, key and matching option of the configuration can be saved
+- Dashboard cards require the Borgbase read right and only count computers of the active entities
+- The encrypted API key is no longer exposed through the API (undisclosed field)
+
+### Changed
+- Uninstalling the plugin now deletes its tables (configuration, including the API key, and repository links)
+- The automatic action is registered at install time instead of on every page load
+- "Clear the saved key" option in the configuration
+
+### Fixed
+- Automatic linking from the computer tab no longer breaks the tab with a wrong redirect
+- Unlinking a repository could delete the link of another computer
+- Errors when the API is unreachable or returns unexpected data (computer tab, dashboard cards, automatic action)
+
 ## [2.0.0] - 2026-01-27
 ### Features
 - GLPI 11 support

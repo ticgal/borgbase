@@ -31,7 +31,7 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_BORGBASE_VERSION', '2.0.0');
+define('PLUGIN_BORGBASE_VERSION', '2.0.1-beta.1');
 define("PLUGIN_BORGBASE_MIN_GLPI_VERSION", "11.0");
 define("PLUGIN_BORGBASE_MAX_GLPI_VERSION", "12.0");
 define("PLUGIN_BORGBASE_ICON", "fa-solid fa-hard-drive");
@@ -80,16 +80,6 @@ function plugin_init_borgbase(): void
                 'addtabon' => [
                     'Profile',
                 ]
-            ]
-        );
-
-        CronTask::register(
-            PluginBorgbaseCron::class,
-            'borgbaseUpdate',
-            DAY_TIMESTAMP,
-            [
-                'comment' => '',
-                'mode' => CronTask::MODE_EXTERNAL
             ]
         );
 

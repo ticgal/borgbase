@@ -43,6 +43,17 @@ class PluginBorgbaseRelation extends CommonDBRelation
     }
 
     /**
+     * No list page for this itemtype (/plugins/borgbase/front/relation.php would
+     * otherwise be served by the core generic list controller)
+     *
+     * @return bool
+     */
+    public static function canView(): bool
+    {
+        return false;
+    }
+
+    /**
      * install
      *
      * @param  Migration $migration
@@ -57,12 +68,12 @@ class PluginBorgbaseRelation extends CommonDBRelation
         $default_collation = DBConnection::getDefaultCollation();
         $default_key_sign = DBConnection::getDefaultPrimaryKeySignOption();
 
-        $table = (new DbUtils())->getTableForItemtype('PluginBorgbaseRelation');
+        $table = self::getTable();
         if (!$DB->tableExists($table)) {
             $migration->displayMessage("Installing $table");
 
             $query = "CREATE TABLE `$table` (
-                `id`         				    INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
+                `id`                            INT {$default_key_sign} NOT NULL AUTO_INCREMENT,
                 `items_id`                      INT {$default_key_sign} NOT NULL DEFAULT '0',
                 `itemtype`                      VARCHAR(255) DEFAULT NULL,
                 `plugin_borgbase_borgbases_id`  INT {$default_key_sign} NOT NULL DEFAULT '0',
@@ -87,7 +98,9 @@ class PluginBorgbaseRelation extends CommonDBRelation
         global $DB;
 
         $table = self::getTable();
-        //$migration->displayMessage('Uninstalling ' . $table);
-        //$DB->queryOrDie("DROP TABLE `$table`", $DB->error());
+        if ($DB->tableExists($table)) {
+            $migration->displayMessage('Uninstalling ' . $table);
+            $DB->dropTable($table);
+        }
     }
 }

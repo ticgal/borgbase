@@ -1,5 +1,5 @@
 # Borgbase for GLPI
-<img src="https://raw.githubusercontent.com/ticgal/borgbase/multimedia/borgbase.png" alt="ActualTime Logo" height="250px" width="250px" class="js-lazy-loaded">
+<img src="https://raw.githubusercontent.com/ticgal/borgbase/multimedia/borgbase.png" alt="Borgbase Logo" height="250px" width="250px" class="js-lazy-loaded">
 
 [Borgbase](https://www.borgbase.com/) integration for GLPI
 
@@ -14,7 +14,9 @@ You need a borgbase account. Get a 10 GB free account for life to test it here: 
 
 # How to configure it
 
-After installing the plugin, go to the GLPI configuration (Setup > General > Borgbase) and add the Borgbase API key. A read-only one is enough.
+After installing the plugin, go to the GLPI configuration (Setup > General > Borgbase) and add the Borgbase API key. **Use a read-only key**: the plugin only reads data.
+
+The server endpoint (`https://api.borgbase.com/graphql` by default) must be an https URL. Changing it clears the saved key, which must be entered again.
 
 Configure the permissions of the profiles that will manage the plugin:
 - UPDATE: The user will be able to update the repository data manually.
