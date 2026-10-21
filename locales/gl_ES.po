@@ -2,13 +2,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Borgbase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-09 10:30+0200\n"
+"POT-Creation-Date: 2026-10-21 16:32+0200\n"
 "Language: gl_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Localazy (https://localazy.com)\n"
 "Plural-Forms: nplurals=2; plural=(n==1) ? 0 : 1;\n"
+
+#: front/borgbase.form.php:83 inc/config.class.php:125
+msgid "Check API connection"
+msgstr "Comproba a conexión coa API"
+
+#: front/borgbase.form.php:97
+msgid "Repository not found"
+msgstr "Repositorio non atopado"
+
+#: front/borgbase.form.php:101
+msgid "The repository or the computer is already linked"
+msgstr "O repositorio ou o ordenador xa están vinculados"
 
 #: front/config.form.php:53
 #, php-format
@@ -17,17 +29,123 @@ msgid_plural "%d repositories linked"
 msgstr[0] "%d repositorio vinculado"
 msgstr[1] "%d repositorios vinculados"
 
-#: front/borgbase.form.php:82 inc/config.class.php:123
-msgid "Check API connection"
-msgstr "Comproba a conexión coa API"
+#: inc/borgbase.class.php:544
+#, php-format
+msgid "%s, automatically linked"
+msgstr "%s, vinculado automaticamente"
 
-#: front/borgbase.form.php:96
-msgid "Repository not found"
-msgstr "Repositorio non atopado"
+#: inc/borgbase.class.php:606
+msgid "Created on"
+msgstr "Creado o"
 
-#: front/borgbase.form.php:100
-msgid "The repository or the computer is already linked"
-msgstr "O repositorio ou o ordenador xa están vinculados"
+#: inc/borgbase.class.php:607
+msgid "Last update on"
+msgstr "Última actualización o"
+
+#: inc/borgbase.class.php:614
+msgid "Not registered"
+msgstr "Non rexistrado"
+
+#: inc/borgbase.class.php:615
+msgid "Select a repository"
+msgstr "Seleccione un repositorio"
+
+#: inc/borgbase.class.php:616
+msgid "Link repository"
+msgstr "Vincular o repositorio"
+
+#: inc/borgbase.class.php:617
+msgid "Name"
+msgstr "Nome"
+
+#: inc/borgbase.class.php:618 inc/borgbase.class.php:727
+msgid "Alert Days"
+msgstr "Días de alerta"
+
+#: inc/borgbase.class.php:619
+msgid "Version"
+msgstr "Versión"
+
+#: inc/borgbase.class.php:620
+msgid "Region"
+msgstr "Rexión"
+
+#: inc/borgbase.class.php:621
+msgid "Compaction Interval"
+msgstr "Intervalo de compactación"
+
+#: inc/borgbase.class.php:622
+msgid "Compaction Hour"
+msgstr "Hora de compactación"
+
+#: inc/borgbase.class.php:623
+msgid "Encryption"
+msgstr "Cifrado"
+
+#: inc/borgbase.class.php:624 inc/borgbase.class.php:716
+msgid "Current Usage"
+msgstr "Uso actual"
+
+#: inc/borgbase.class.php:625 inc/borgbase.class.php:685
+msgid "Creation Date"
+msgstr "Data de creación"
+
+#: inc/borgbase.class.php:626
+msgid "Last Backup"
+msgstr "Última copia de seguridade"
+
+#: inc/borgbase.class.php:627
+msgid "Confirm the final deletion?"
+msgstr "¿Queres confirmar a eliminación definitiva?"
+
+#: inc/borgbase.class.php:628
+msgid "Unlink repository"
+msgstr "Desvincular o repositorio"
+
+#: inc/borgbase.class.php:629
+msgid "Reload information"
+msgstr "Recargar información"
+
+#: inc/borgbase.class.php:695
+msgid "Last Modification"
+msgstr "Última modificación"
+
+#: inc/borgbase.class.php:705 inc/borgbase.class.php:750
+msgid "Encrypted"
+msgstr "Cifrado"
+
+#: inc/config.class.php:120
+msgid "Server endpoint"
+msgstr "Punto de acceso ao servidor"
+
+#: inc/config.class.php:121
+msgid "Authentication key"
+msgstr "Chave de autenticación"
+
+#: inc/config.class.php:122
+msgid "Computer name matches exactly with repository name"
+msgstr "O nome do ordenador coincide exactamente co nome do repositorio"
+
+#: inc/config.class.php:123
+msgid "Link repositories"
+msgstr "Vincular os repositorios"
+
+#: inc/config.class.php:124
+msgid "Established connection"
+msgstr "Conexión establecida"
+
+#: inc/config.class.php:202
+msgid "The server endpoint must be a valid https URL"
+msgstr "O endpoint do servidor debe ser unha URL https válida"
+
+#: inc/config.class.php:220
+msgid "The server endpoint has changed: enter the authentication key again"
+msgstr ""
+"O endpoint do servidor cambiou: introduce de novo a clave de autenticación"
+
+#: inc/cron.class.php:55
+msgid "Update borgbase records"
+msgstr "Actualizar rexistros de borgbase"
 
 #: inc/dashboard.class.php:54
 msgid "Usage History"
@@ -37,152 +155,33 @@ msgstr "Historial de uso"
 msgid "Used Quota"
 msgstr "Cota usada"
 
-#: inc/dashboard.class.php:70 inc/provider.class.php:140
+#: inc/dashboard.class.php:70 inc/provider.class.php:151
 msgid "Number of Repositories"
 msgstr "Número de Repositorios"
 
-#: inc/dashboard.class.php:78 inc/provider.class.php:155
+#: inc/dashboard.class.php:78 inc/provider.class.php:164
 msgid "Current Use"
 msgstr "Uso actual"
 
-#: inc/dashboard.class.php:86 inc/provider.class.php:205
+#: inc/dashboard.class.php:86 inc/provider.class.php:221
 msgid "Number of Computers with a Repo Linked"
 msgstr "Número de ordenadores cun repositorio ligado"
 
-#: inc/provider.class.php:81
+#: inc/provider.class.php:63
 msgid "Total Usage History"
 msgstr "Historial de uso total"
 
-#: inc/provider.class.php:104
-msgid "Storage usage"
-msgstr "Uso do almacenamento"
-
-#: inc/provider.class.php:112
-msgid "Free storage"
-msgstr "Almacenamento libre"
-
-#: inc/provider.class.php:121
+#: inc/provider.class.php:100
 msgid "Total Usage Percentage"
 msgstr "Porcentaxe de uso total"
 
-#: inc/config.class.php:117
-msgid "Server endpoint"
-msgstr "Punto de acceso ao servidor"
+#: inc/provider.class.php:115
+msgid "Storage usage"
+msgstr "Uso do almacenamento"
 
-#: inc/config.class.php:118
-msgid "Authentication key"
-msgstr "Chave de autenticación"
+#: inc/provider.class.php:123
+msgid "Free storage"
+msgstr "Almacenamento libre"
 
-#: inc/config.class.php:119
-msgid "Clear the saved key"
-msgstr "Borrar a clave gardada"
-
-#: inc/config.class.php:120
-msgid "Computer name matches exactly with repository name"
-msgstr "O nome do ordenador coincide exactamente co nome do repositorio"
-
-#: inc/config.class.php:121
-msgid "Link repositories"
-msgstr "Vincular os repositorios"
-
-#: inc/config.class.php:122
-msgid "Established connection"
-msgstr "Conexión establecida"
-
-#: inc/config.class.php:200
-msgid "The server endpoint must be a valid https URL"
-msgstr "O endpoint do servidor debe ser unha URL https válida"
-
-#: inc/config.class.php:218
-msgid "The server endpoint has changed: enter the authentication key again"
-msgstr ""
-"O endpoint do servidor cambiou: introduce de novo a clave de autenticación"
-
-#: inc/borgbase.class.php:533
-#, php-format
-msgid "%s, automatically linked"
-msgstr "%s, vinculado automaticamente"
-
-#: inc/borgbase.class.php:595
-msgid "Created on"
-msgstr "Creado o"
-
-#: inc/borgbase.class.php:596
-msgid "Last update on"
-msgstr "Última actualización o"
-
-#: inc/borgbase.class.php:603
-msgid "Not registered"
-msgstr "Non rexistrado"
-
-#: inc/borgbase.class.php:604
-msgid "Select a repository"
-msgstr "Seleccione un repositorio"
-
-#: inc/borgbase.class.php:605
-msgid "Link repository"
-msgstr "Vincular o repositorio"
-
-#: inc/borgbase.class.php:606
-msgid "Name"
-msgstr "Nome"
-
-#: inc/borgbase.class.php:607 inc/borgbase.class.php:716
-msgid "Alert Days"
-msgstr "Días de alerta"
-
-#: inc/borgbase.class.php:608
-msgid "Version"
-msgstr "Versión"
-
-#: inc/borgbase.class.php:609
-msgid "Region"
-msgstr "Rexión"
-
-#: inc/borgbase.class.php:610
-msgid "Compaction Interval"
-msgstr "Intervalo de compactación"
-
-#: inc/borgbase.class.php:611
-msgid "Compaction Hour"
-msgstr "Hora de compactación"
-
-#: inc/borgbase.class.php:612
-msgid "Encryption"
-msgstr "Cifrado"
-
-#: inc/borgbase.class.php:613 inc/borgbase.class.php:705
-msgid "Current Usage"
-msgstr "Uso actual"
-
-#: inc/borgbase.class.php:614 inc/borgbase.class.php:674
-msgid "Creation Date"
-msgstr "Data de creación"
-
-#: inc/borgbase.class.php:615
-msgid "Last Backup"
-msgstr "Última copia de seguridade"
-
-#: inc/borgbase.class.php:616
-msgid "Confirm the final deletion?"
-msgstr "¿Queres confirmar a eliminación definitiva?"
-
-#: inc/borgbase.class.php:617
-msgid "Unlink repository"
-msgstr "Desvincular o repositorio"
-
-#: inc/borgbase.class.php:618
-msgid "Reload information"
-msgstr "Recargar información"
-
-#: inc/borgbase.class.php:684
-msgid "Last Modification"
-msgstr "Última modificación"
-
-#: inc/borgbase.class.php:694 inc/borgbase.class.php:739
-msgid "Encrypted"
-msgstr "Cifrado"
-
-#: inc/cron.class.php:55
-msgid "Update borgbase records"
-msgstr "Actualizar rexistros de borgbase"
+#~ msgid "Clear the saved key"
+#~ msgstr "Borrar a clave gardada"

@@ -2,13 +2,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Borgbase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-09 10:30+0200\n"
+"POT-Creation-Date: 2026-10-21 16:32+0200\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Localazy (https://localazy.com)\n"
 "Plural-Forms: nplurals=2; plural=(n==1) ? 0 : 1;\n"
+
+#: front/borgbase.form.php:83 inc/config.class.php:125
+msgid "Check API connection"
+msgstr "Check API connection"
+
+#: front/borgbase.form.php:97
+msgid "Repository not found"
+msgstr "Repository not found"
+
+#: front/borgbase.form.php:101
+msgid "The repository or the computer is already linked"
+msgstr "The repository or the computer is already linked"
 
 #: front/config.form.php:53
 #, php-format
@@ -17,17 +29,122 @@ msgid_plural "%d repositories linked"
 msgstr[0] "%d repository linked"
 msgstr[1] "%d repositories linked"
 
-#: front/borgbase.form.php:82 inc/config.class.php:123
-msgid "Check API connection"
-msgstr "Check API connection"
+#: inc/borgbase.class.php:544
+#, php-format
+msgid "%s, automatically linked"
+msgstr "%s, automatically linked"
 
-#: front/borgbase.form.php:96
-msgid "Repository not found"
-msgstr "Repository not found"
+#: inc/borgbase.class.php:606
+msgid "Created on"
+msgstr "Created on"
 
-#: front/borgbase.form.php:100
-msgid "The repository or the computer is already linked"
-msgstr "The repository or the computer is already linked"
+#: inc/borgbase.class.php:607
+msgid "Last update on"
+msgstr "Last update on"
+
+#: inc/borgbase.class.php:614
+msgid "Not registered"
+msgstr "Not registered"
+
+#: inc/borgbase.class.php:615
+msgid "Select a repository"
+msgstr "Select a repository"
+
+#: inc/borgbase.class.php:616
+msgid "Link repository"
+msgstr "Link repository"
+
+#: inc/borgbase.class.php:617
+msgid "Name"
+msgstr "Name"
+
+#: inc/borgbase.class.php:618 inc/borgbase.class.php:727
+msgid "Alert Days"
+msgstr "Alert Days"
+
+#: inc/borgbase.class.php:619
+msgid "Version"
+msgstr "Version"
+
+#: inc/borgbase.class.php:620
+msgid "Region"
+msgstr "Region"
+
+#: inc/borgbase.class.php:621
+msgid "Compaction Interval"
+msgstr "Compaction Interval"
+
+#: inc/borgbase.class.php:622
+msgid "Compaction Hour"
+msgstr "Compaction Hour"
+
+#: inc/borgbase.class.php:623
+msgid "Encryption"
+msgstr "Encryption"
+
+#: inc/borgbase.class.php:624 inc/borgbase.class.php:716
+msgid "Current Usage"
+msgstr "Current Usage"
+
+#: inc/borgbase.class.php:625 inc/borgbase.class.php:685
+msgid "Creation Date"
+msgstr "Creation Date"
+
+#: inc/borgbase.class.php:626
+msgid "Last Backup"
+msgstr "Last Backup"
+
+#: inc/borgbase.class.php:627
+msgid "Confirm the final deletion?"
+msgstr "Confirm the final deletion?"
+
+#: inc/borgbase.class.php:628
+msgid "Unlink repository"
+msgstr "Unlink repository"
+
+#: inc/borgbase.class.php:629
+msgid "Reload information"
+msgstr "Reload information"
+
+#: inc/borgbase.class.php:695
+msgid "Last Modification"
+msgstr "Last Modification"
+
+#: inc/borgbase.class.php:705 inc/borgbase.class.php:750
+msgid "Encrypted"
+msgstr "Encrypted"
+
+#: inc/config.class.php:120
+msgid "Server endpoint"
+msgstr "Server endpoint"
+
+#: inc/config.class.php:121
+msgid "Authentication key"
+msgstr "Authentication key"
+
+#: inc/config.class.php:122
+msgid "Computer name matches exactly with repository name"
+msgstr "Computer name matches exactly with repository name"
+
+#: inc/config.class.php:123
+msgid "Link repositories"
+msgstr "Link repositories"
+
+#: inc/config.class.php:124
+msgid "Established connection"
+msgstr "Established connection"
+
+#: inc/config.class.php:202
+msgid "The server endpoint must be a valid https URL"
+msgstr "The server endpoint must be a valid https URL"
+
+#: inc/config.class.php:220
+msgid "The server endpoint has changed: enter the authentication key again"
+msgstr "The server endpoint has changed: enter the authentication key again"
+
+#: inc/cron.class.php:55
+msgid "Update borgbase records"
+msgstr "Update borgbase records"
 
 #: inc/dashboard.class.php:54
 msgid "Usage History"
@@ -37,151 +154,33 @@ msgstr "Usage History"
 msgid "Used Quota"
 msgstr "Used Quota"
 
-#: inc/dashboard.class.php:70 inc/provider.class.php:140
+#: inc/dashboard.class.php:70 inc/provider.class.php:151
 msgid "Number of Repositories"
 msgstr "Number of Repositories"
 
-#: inc/dashboard.class.php:78 inc/provider.class.php:155
+#: inc/dashboard.class.php:78 inc/provider.class.php:164
 msgid "Current Use"
 msgstr "Current Use"
 
-#: inc/dashboard.class.php:86 inc/provider.class.php:205
+#: inc/dashboard.class.php:86 inc/provider.class.php:221
 msgid "Number of Computers with a Repo Linked"
 msgstr "Number of Computers with a Repo Linked"
 
-#: inc/provider.class.php:81
+#: inc/provider.class.php:63
 msgid "Total Usage History"
 msgstr "Total Usage History"
 
-#: inc/provider.class.php:104
-msgid "Storage usage"
-msgstr "Storage usage"
-
-#: inc/provider.class.php:112
-msgid "Free storage"
-msgstr "Free storage"
-
-#: inc/provider.class.php:121
+#: inc/provider.class.php:100
 msgid "Total Usage Percentage"
 msgstr "Total Usage Percentage"
 
-#: inc/config.class.php:117
-msgid "Server endpoint"
-msgstr "Server endpoint"
+#: inc/provider.class.php:115
+msgid "Storage usage"
+msgstr "Storage usage"
 
-#: inc/config.class.php:118
-msgid "Authentication key"
-msgstr "Authentication key"
+#: inc/provider.class.php:123
+msgid "Free storage"
+msgstr "Free storage"
 
-#: inc/config.class.php:119
-msgid "Clear the saved key"
-msgstr "Clear the saved key"
-
-#: inc/config.class.php:120
-msgid "Computer name matches exactly with repository name"
-msgstr "Computer name matches exactly with repository name"
-
-#: inc/config.class.php:121
-msgid "Link repositories"
-msgstr "Link repositories"
-
-#: inc/config.class.php:122
-msgid "Established connection"
-msgstr "Established connection"
-
-#: inc/config.class.php:200
-msgid "The server endpoint must be a valid https URL"
-msgstr "The server endpoint must be a valid https URL"
-
-#: inc/config.class.php:218
-msgid "The server endpoint has changed: enter the authentication key again"
-msgstr "The server endpoint has changed: enter the authentication key again"
-
-#: inc/borgbase.class.php:533
-#, php-format
-msgid "%s, automatically linked"
-msgstr "%s, automatically linked"
-
-#: inc/borgbase.class.php:595
-msgid "Created on"
-msgstr "Created on"
-
-#: inc/borgbase.class.php:596
-msgid "Last update on"
-msgstr "Last update on"
-
-#: inc/borgbase.class.php:603
-msgid "Not registered"
-msgstr "Not registered"
-
-#: inc/borgbase.class.php:604
-msgid "Select a repository"
-msgstr "Select a repository"
-
-#: inc/borgbase.class.php:605
-msgid "Link repository"
-msgstr "Link repository"
-
-#: inc/borgbase.class.php:606
-msgid "Name"
-msgstr "Name"
-
-#: inc/borgbase.class.php:607 inc/borgbase.class.php:716
-msgid "Alert Days"
-msgstr "Alert Days"
-
-#: inc/borgbase.class.php:608
-msgid "Version"
-msgstr "Version"
-
-#: inc/borgbase.class.php:609
-msgid "Region"
-msgstr "Region"
-
-#: inc/borgbase.class.php:610
-msgid "Compaction Interval"
-msgstr "Compaction Interval"
-
-#: inc/borgbase.class.php:611
-msgid "Compaction Hour"
-msgstr "Compaction Hour"
-
-#: inc/borgbase.class.php:612
-msgid "Encryption"
-msgstr "Encryption"
-
-#: inc/borgbase.class.php:613 inc/borgbase.class.php:705
-msgid "Current Usage"
-msgstr "Current Usage"
-
-#: inc/borgbase.class.php:614 inc/borgbase.class.php:674
-msgid "Creation Date"
-msgstr "Creation Date"
-
-#: inc/borgbase.class.php:615
-msgid "Last Backup"
-msgstr "Last Backup"
-
-#: inc/borgbase.class.php:616
-msgid "Confirm the final deletion?"
-msgstr "Confirm the final deletion?"
-
-#: inc/borgbase.class.php:617
-msgid "Unlink repository"
-msgstr "Unlink repository"
-
-#: inc/borgbase.class.php:618
-msgid "Reload information"
-msgstr "Reload information"
-
-#: inc/borgbase.class.php:684
-msgid "Last Modification"
-msgstr "Last Modification"
-
-#: inc/borgbase.class.php:694 inc/borgbase.class.php:739
-msgid "Encrypted"
-msgstr "Encrypted"
-
-#: inc/cron.class.php:55
-msgid "Update borgbase records"
-msgstr "Update borgbase records"
+#~ msgid "Clear the saved key"
+#~ msgstr "Clear the saved key"

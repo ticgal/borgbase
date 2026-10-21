@@ -15,7 +15,6 @@
 ### Changed
 - Uninstalling the plugin now deletes its tables (configuration, including the API key, and repository links)
 - The automatic action is registered at install time instead of on every page load
-- "Clear the saved key" option in the configuration
 
 ### Fixed
 - Automatic linking from the computer tab no longer breaks the tab with a wrong redirect

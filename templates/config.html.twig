@@ -54,15 +54,6 @@
                 })
             ) }}
 
-            {% if has_apikey %}
-                {{ fields.checkboxField(
-                    '_blank_apikey',
-                    0,
-                    labels['blank'],
-                    options
-                ) }}
-            {% endif %}
-
             {% if connection %}
                 {{ fields.htmlField(
                     'connection',

@@ -4,7 +4,7 @@ CUR_PATH="`dirname \"$0\"`"
 
 cd "$CUR_PATH/.."
 
-xgettext *.php */*.php -o locales/borgbase.pot -L PHP --add-comments=TRANS --from-code=UTF-8 --force-po -k --keyword=__:1,2t --keyword=_x:1,2,3t --keyword=__s:1,2t --keyword=_sx:1,2,3t --keyword=_n:1,2,3,4t --keyword=_sn:1,2t --keyword=_nx:1,2,3t --copyright-holder "TICGAL"
+xgettext *.php */*.php -o locales/borgbase.pot -L PHP --add-comments=TRANS --from-code=UTF-8 --force-po -k --keyword=__:1,2t --keyword=_x:1,2,3t --keyword=__s:1,2t --keyword=_sx:1,2,3t --keyword=_n:1,2,4t --keyword=_sn:1,2t --keyword=_nx:1,2,3t --copyright-holder "TICGAL"
 
 cd locales
 

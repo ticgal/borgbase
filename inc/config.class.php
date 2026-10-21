@@ -119,7 +119,6 @@ class PluginBorgbaseConfig extends CommonDBTM
             'labels'      => [
                 'server'      => __('Server endpoint', 'borgbase'),
                 'apikey'      => __('Authentication key', 'borgbase'),
-                'blank'       => __('Clear the saved key', 'borgbase'),
                 'match'       => __('Computer name matches exactly with repository name', 'borgbase'),
                 'reload'      => __('Link repositories', 'borgbase'),
                 'connected'   => __('Established connection', 'borgbase'),
