@@ -215,7 +215,7 @@ class PluginBorgbaseBorgbase extends CommonDBTM
         if (!self::isValidRepoId($repoId)) {
             return [];
         }
-        $query = 'query($repoId: String) { repo(repoId: $repoId) {' . self::getRepoCommonFields() . '}}';
+        $query = 'query($repoId: String!) { repo(repoId: $repoId) {' . self::getRepoCommonFields() . '}}';
         $repo = $this->getResponseKey($query, 'repo', ['repoId' => $repoId]);
         return self::isValidRepo($repo) ? $repo : [];
     }
