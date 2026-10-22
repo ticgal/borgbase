@@ -65,6 +65,12 @@ class Provider
      */
     public static function usageHistory($params = []): array
     {
+        $label = 'Borgbase - ' . __('Total Usage History', 'borgbase') . ' (GB)';
+        if (!Session::haveRight(Borgbase::$rightname, READ)) {
+            // Line/bar widgets need a list in 'data' (see below)
+            return ['data' => [], 'label' => $label, 'icon' => Borgbase::getIcon()];
+        }
+
         $data = [];
 
         $usages = self::getUsages();
@@ -83,7 +89,7 @@ class Provider
         // empty chart, ['nodata' => true] makes Widget::simpleLine() fail
         return [
             'data'  => $data,
-            'label' => 'Borgbase - ' . __('Total Usage History', 'borgbase') . ' (GB)',
+            'label' => $label,
             'icon'  => Borgbase::getIcon(),
         ];
     }
@@ -96,6 +102,11 @@ class Provider
      */
     public static function usageQuotaPer($params = []): array
     {
+        $label = 'Borgbase - ' . __('Total Usage Percentage', 'borgbase') . ' (%)';
+        if (!Session::haveRight(Borgbase::$rightname, READ)) {
+            return ['data' => ['nodata' => true], 'label' => $label, 'icon' => Borgbase::getIcon()];
+        }
+
         $data = [];
 
         $usages = self::getUsages();
@@ -123,7 +134,7 @@ class Provider
 
         return [
             'data'      => $data,
-            'label'     => 'Borgbase - ' . __('Total Usage Percentage', 'borgbase') . ' (%)',
+            'label'     => $label,
             'icon'      => Borgbase::getIcon(),
         ];
     }
@@ -155,9 +166,14 @@ class Provider
      */
     public static function currentUse($params = []): array
     {
+        $label = 'Borgbase - ' . __('Current Use', 'borgbase') . ' (GB)';
+        if (!Session::haveRight(Borgbase::$rightname, READ)) {
+            return ['number' => 0, 'label' => $label, 'icon' => Borgbase::getIcon()];
+        }
+
         return [
             'number'    => (float) (self::getUsages()[0]['usedGb'] ?? 0),
-            'label'     => 'Borgbase - ' . __('Current Use', 'borgbase') . ' (GB)',
+            'label'     => $label,
             'icon'      => Borgbase::getIcon(),
         ];
     }

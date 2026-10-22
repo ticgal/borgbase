@@ -48,6 +48,9 @@ class Config extends CommonDBTM
 
     public static string $rightname = 'config';
 
+    /** The encrypted API key is never exposed (API, history, exports) */
+    public static array $undisclosedFields = ['apikey'];
+
     /**
      * {@inheritDoc}
      */
@@ -132,7 +135,6 @@ class Config extends CommonDBTM
             'labels'      => [
                 'server'      => __('Server endpoint', 'borgbase'),
                 'apikey'      => __('Authentication key', 'borgbase'),
-                'blank'       => __('Clear the saved key', 'borgbase'),
                 'match'       => __('Computer name matches exactly with repository name', 'borgbase'),
                 'reload'      => __('Link repositories', 'borgbase'),
                 'connected'   => __('Established connection', 'borgbase'),

@@ -38,7 +38,7 @@ Configuration (Setup > General > Borgbase, requires re-authentication)
 - [x] T2.4 Tab shows "Established connection"; neither the key nor its ciphertext appears in the HTML.
 - [x] T2.5 `http://`, `javascript:`, `file://`, `gopher://`, userinfo URLs and garbage are rejected with a message; nothing saved.
 - [x] T2.6 Changing the server without a new key clears the stored key; the new host never receives it.
-- [x] T2.7 "Clear the saved key" clears it; an empty key field keeps the stored one.
+- [x] T2.7 `_blank_apikey` (core "Clear" checkbox of the password field) clears the key; an empty key field keeps the stored one.
 - [x] T2.8 Only `server`/`apikey`/`match` of row 1 are written (posted `id=5`, `debug=1` ignored).
 - [x] T2.9 Cross-site POST → 403, no change. T2.10 POST without re-authentication → `/ReAuth/`, no change. T2.11 Technician (no `config` right) → 403.
 - [x] T2.12 "Link repositories" button relinks by name and shows the count.
@@ -81,3 +81,30 @@ Outbound HTTP
 
 Static analysis
 - [x] PHPCS, PHP-CS-Fixer, PHPStan (composer config; and the bundled phar without `vendor/`), TwigCS with the GLPI 12 ruleset.
+
+## Step 2 — Security fixes from 2.0.1 (GLPI 11) brought to 3.0.0-beta.2 (2026-10-22)
+
+Requirement: fixes reported by Teclib on the GLPI 11 line (`bugfix/securityissues`, 2.0.1-beta.1) present in GLPI 12.
+
+- [x] T2.4 Config tab shows exactly one `_blank_apikey` checkbox (the core password field's "Clear"); the plugin no longer adds a duplicate.
+- [x] T5.6 Profile with all Borgbase rights but read-only on Computers (Observer): tab shows data without Reload/Unlink/Link buttons; the three POST actions → 403; no DB change.
+- [x] T4.8/T4.9 still green with the stricter unlink (rows deleted only when repository, computer and relation belong together).
+- [x] T7.x still green with the explicit right check in the usage providers.
+- [ ] `Config::$undisclosedFields = ['apikey']`: not reachable over HTTP in this setup (API v1 answers `ERROR_RESOURCE_NOT_FOUND_NOR_COMMONDBTM` for the plugin config itemtype); verified by code only, defence in depth.
+- [x] Locales: `tools/extract_template.sh` now extracts `_n`/`_x`/`_sx`/`_nx` (plural "%d repository linked" kept in the .pot).
+- [x] Run: HTTP 47/47 + browser 6/6, strict and production; `php-errors.log` without plugin entries. PHPCS, PHP-CS-Fixer, PHPStan (composer and phar), TwigCS green.
+
+## Step 3 — Real BorgBase API (2026-10-22)
+
+Requirement: the plugin works against the real API (`https://api.borgbase.com/graphql`, read-only key), not only the mock.
+
+- [x] Bug found and fixed: the real schema is `repo(repoId: String!)`; the query declared `$repoId: String` and the API rejected it
+  ("Variable '$repoId' of type 'String' used in position expecting type 'String!'"), breaking manual link, reload and the
+  automatic action. Fixed (`String!`) in 3.0.0-beta.2 and in the 2.0.1 branch. The mock now rejects the nullable declaration too.
+- [x] `real_smoke.py` (local plugin memory, never uninstalls nor changes server/key; read-only on BorgBase; purges its «BB real *»
+  computers): connection, real repo dropdown, auto-link by name, reload, manual link + unlink, 5 dashboard cards, automatic action,
+  search, no API errors in `borgbase.log` — 9/9 in strict mode.
+- [x] Browser against the real API: config "Established connection" with one "Clear" checkbox, computer tab with formatted usage,
+  reload, no JS errors.
+- [x] Real data notes: `overageList` is empty for the test account (usage cards show no data / 0, correct); repo `currentUsage`
+  values (8.08, 12.08, 30.08) are shown as MB.

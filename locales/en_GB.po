@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Borgbase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-09 10:09+0200\n"
+"POT-Creation-Date: 2026-10-22 15:05+0200\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,152 +18,148 @@ msgstr "Usage History"
 msgid "Used Quota"
 msgstr "Used Quota"
 
-#: src/Dashboard.php:72 src/Provider.php:149
+#: src/Dashboard.php:72 src/Provider.php:156
 msgid "Number of Repositories"
 msgstr "Number of Repositories"
 
-#: src/Dashboard.php:80 src/Provider.php:164
+#: src/Dashboard.php:80 src/Provider.php:169
 msgid "Current Use"
 msgstr "Current Use"
 
-#: src/Dashboard.php:88 src/Provider.php:214
+#: src/Dashboard.php:88 src/Provider.php:226
 msgid "Number of Computers with a Repo Linked"
 msgstr "Number of Computers with a Repo Linked"
 
-#: src/Provider.php:90
+#: src/Provider.php:68
 msgid "Total Usage History"
 msgstr "Total Usage History"
 
-#: src/Provider.php:113
-msgid "Storage usage"
-msgstr "Storage usage"
-
-#: src/Provider.php:121
-msgid "Free storage"
-msgstr "Free storage"
-
-#: src/Provider.php:130
+#: src/Provider.php:105
 msgid "Total Usage Percentage"
 msgstr "Total Usage Percentage"
 
-#: src/Borgbase.php:533
+#: src/Provider.php:120
+msgid "Storage usage"
+msgstr "Storage usage"
+
+#: src/Provider.php:128
+msgid "Free storage"
+msgstr "Free storage"
+
+#: src/Borgbase.php:544
 #, php-format
 msgid "%s, automatically linked"
 msgstr "%s, automatically linked"
 
-#: src/Borgbase.php:595
+#: src/Borgbase.php:606
 msgid "Created on"
 msgstr "Created on"
 
-#: src/Borgbase.php:596
+#: src/Borgbase.php:607
 msgid "Last update on"
 msgstr "Last update on"
 
-#: src/Borgbase.php:603
+#: src/Borgbase.php:614
 msgid "Not registered"
 msgstr "Not registered"
 
-#: src/Borgbase.php:604
+#: src/Borgbase.php:615
 msgid "Select a repository"
 msgstr "Select a repository"
 
-#: src/Borgbase.php:605
+#: src/Borgbase.php:616
 msgid "Link repository"
 msgstr "Link repository"
 
-#: src/Borgbase.php:606
+#: src/Borgbase.php:617
 msgid "Name"
 msgstr "Name"
 
-#: src/Borgbase.php:607 src/Borgbase.php:716
+#: src/Borgbase.php:618 src/Borgbase.php:727
 msgid "Alert Days"
 msgstr "Alert Days"
 
-#: src/Borgbase.php:608
+#: src/Borgbase.php:619
 msgid "Version"
 msgstr "Version"
 
-#: src/Borgbase.php:609
+#: src/Borgbase.php:620
 msgid "Region"
 msgstr "Region"
 
-#: src/Borgbase.php:610
+#: src/Borgbase.php:621
 msgid "Compaction Interval"
 msgstr "Compaction Interval"
 
-#: src/Borgbase.php:611
+#: src/Borgbase.php:622
 msgid "Compaction Hour"
 msgstr "Compaction Hour"
 
-#: src/Borgbase.php:612
+#: src/Borgbase.php:623
 msgid "Encryption"
 msgstr "Encryption"
 
-#: src/Borgbase.php:613 src/Borgbase.php:705
+#: src/Borgbase.php:624 src/Borgbase.php:716
 msgid "Current Usage"
 msgstr "Current Usage"
 
-#: src/Borgbase.php:614 src/Borgbase.php:674
+#: src/Borgbase.php:625 src/Borgbase.php:685
 msgid "Creation Date"
 msgstr "Creation Date"
 
-#: src/Borgbase.php:615
+#: src/Borgbase.php:626
 msgid "Last Backup"
 msgstr "Last Backup"
 
-#: src/Borgbase.php:616
+#: src/Borgbase.php:627
 msgid "Confirm the final deletion?"
 msgstr "Confirm the final deletion?"
 
-#: src/Borgbase.php:617
+#: src/Borgbase.php:628
 msgid "Unlink repository"
 msgstr "Unlink repository"
 
-#: src/Borgbase.php:618
+#: src/Borgbase.php:629
 msgid "Reload information"
 msgstr "Reload information"
 
-#: src/Borgbase.php:684
+#: src/Borgbase.php:695
 msgid "Last Modification"
 msgstr "Last Modification"
 
-#: src/Borgbase.php:694 src/Borgbase.php:739
+#: src/Borgbase.php:705 src/Borgbase.php:750
 msgid "Encrypted"
 msgstr "Encrypted"
 
-#: src/Config.php:133
+#: src/Config.php:136
 msgid "Server endpoint"
 msgstr "Server endpoint"
 
-#: src/Config.php:134
+#: src/Config.php:137
 msgid "Authentication key"
 msgstr "Authentication key"
 
-#: src/Config.php:135
-msgid "Clear the saved key"
-msgstr "Clear the saved key"
-
-#: src/Config.php:136
+#: src/Config.php:138
 msgid "Computer name matches exactly with repository name"
 msgstr "Computer name matches exactly with repository name"
 
-#: src/Config.php:137
+#: src/Config.php:139
 msgid "Link repositories"
 msgstr "Link repositories"
 
-#: src/Config.php:138
+#: src/Config.php:140
 msgid "Established connection"
 msgstr "Established connection"
 
-#: src/Config.php:139 front/borgbase.form.php:83
+#: src/Config.php:141 front/borgbase.form.php:84
 msgid "Check API connection"
 msgstr "Check API connection"
 
-#: src/Config.php:216
+#: src/Config.php:218
 msgid "The server endpoint must be a valid https URL"
 msgstr "The server endpoint must be a valid https URL"
 
-#: src/Config.php:234
+#: src/Config.php:236
 msgid "The server endpoint has changed: enter the authentication key again"
 msgstr "The server endpoint has changed: enter the authentication key again"
 
@@ -178,10 +174,10 @@ msgid_plural "%d repositories linked"
 msgstr[0] "%d repository linked"
 msgstr[1] "%d repositories linked"
 
-#: front/borgbase.form.php:97
+#: front/borgbase.form.php:98
 msgid "Repository not found"
 msgstr "Repository not found"
 
-#: front/borgbase.form.php:101
+#: front/borgbase.form.php:102
 msgid "The repository or the computer is already linked"
 msgstr "The repository or the computer is already linked"

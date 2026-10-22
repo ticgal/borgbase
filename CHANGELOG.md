@@ -1,5 +1,16 @@
 # Borgbase - GLPI Plugin CHANGELOG
 
+## [3.0.0-beta.2] - 2026-10-22
+Includes the security fixes from 2.0.1.
+
+### Security
+- Linking, reloading and unlinking repositories require the update right on the computer, not only the read right
+- The encrypted API key is no longer exposed through the API, history or exports (undisclosed field)
+- Unlinking only deletes the rows where the repository and the computer belong together
+
+### Fixed
+- The configuration showed the "clear the saved key" checkbox twice (the password field already provides it)
+
 ## [3.0.0-beta.1] - 2026-10-09
 ### Features
 - GLPI 12 support (GLPI 11 is no longer supported by this branch)

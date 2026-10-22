@@ -215,7 +215,7 @@ class Borgbase extends CommonDBTM
         if (!self::isValidRepoId($repoId)) {
             return [];
         }
-        $query = 'query($repoId: String) { repo(repoId: $repoId) {' . self::getRepoCommonFields() . '}}';
+        $query = 'query($repoId: String!) { repo(repoId: $repoId) {' . self::getRepoCommonFields() . '}}';
         $repo = $this->getResponseKey($query, 'repo', ['repoId' => $repoId]);
         return self::isValidRepo($repo) ? $repo : [];
     }
@@ -411,13 +411,24 @@ class Borgbase extends CommonDBTM
         /** @var \DBmysql $DB */
         global $DB;
 
-        $row = $this->getComputerLink((int) $computerId, (string) $repoId);
+        $computerId = (int) $computerId;
+        $repoId = (string) $repoId;
+        $row = $this->getComputerLink($computerId, $repoId);
         if ($row === null) {
             return false;
         }
 
-        $DB->delete(Relation::getTable(), ['plugin_borgbase_borgbases_id' => $row['id']]);
-        $DB->delete($this->getTable(), ['id' => $row['id']]);
+        $DB->delete(Relation::getTable(), [
+            'plugin_borgbase_borgbases_id' => $row['id'],
+            'itemtype'                     => Computer::class,
+            'items_id'                     => $computerId,
+        ]);
+        // Only the row where the repository and the computer belong together
+        $DB->delete($this->getTable(), [
+            'id'          => $row['id'],
+            'borg_id'     => $repoId,
+            'computer_id' => $computerId,
+        ]);
 
         return true;
     }
@@ -553,7 +564,9 @@ class Borgbase extends CommonDBTM
 
         $borgbase = new self();
         $computerId = (int) $computer->getID();
-        $canCreate = Session::haveRight(self::$rightname, CREATE);
+        // Actions write the computer's link data and history: they also need the update right on it
+        $canEditComputer = $computer->can($computerId, UPDATE);
+        $canCreate = $canEditComputer && Session::haveRight(self::$rightname, CREATE);
 
         $data = [];
         $elements = [];
@@ -626,8 +639,8 @@ class Borgbase extends CommonDBTM
             'value'     => $computerId,
             'labels'    => $labels,
             'canCreate' => $canCreate,
-            'canUpdate' => Session::haveRight(self::$rightname, UPDATE),
-            'canPurge'  => Session::haveRight(self::$rightname, PURGE),
+            'canUpdate' => $canEditComputer && Session::haveRight(self::$rightname, UPDATE),
+            'canPurge'  => $canEditComputer && Session::haveRight(self::$rightname, PURGE),
         ]);
 
         return true;

@@ -56,13 +56,14 @@ if ($action === null) {
 
 Session::checkRight(Borgbase::$rightname, $actions[$action]);
 
-// The computer must exist and be visible to the user (entity)
+// The computer must exist and be editable by the user (entity): every action
+// writes its link data or its history
 $computerId = (int) ($action === 'assoc' ? ($_POST['id'] ?? 0) : ($_POST['computerId'] ?? 0));
 $computer = new Computer();
 if ($computerId <= 0 || !$computer->getFromDB($computerId)) {
     throw new NotFoundHttpException();
 }
-if (!$computer->can($computerId, READ)) {
+if (!$computer->can($computerId, UPDATE)) {
     throw new AccessDeniedHttpException();
 }
 

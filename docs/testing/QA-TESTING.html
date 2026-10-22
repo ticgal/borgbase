@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Borgbase 3.0.0 — QA checklist</title>
+<title>Borgbase 3.0.0-beta.2 — QA checklist</title>
 <style>
   body { font-family: sans-serif; font-size: 14px; margin: 1.5em; }
   table { border-collapse: collapse; width: 100%; margin-bottom: 1.5em; }
@@ -32,7 +32,7 @@ records in GLPI; the <code>[destructive]</code> section at the end removes the p
 <tr><td>3</td><td>[live write] Automatic linking on save</td><td>After saving the key, open the computer whose name matches a repository, Borgbase tab.</td><td>The repository data is shown (name, version, region, usage, dates).</td><td></td><td></td></tr>
 <tr><td>4</td><td>Server must be https</td><td>Change the server to <code>http://api.borgbase.com/graphql</code>, Save.</td><td>Error "The server endpoint must be a valid https URL"; nothing changes.</td><td></td><td></td></tr>
 <tr><td>5</td><td>[live write] Changing the server clears the key</td><td>Change the server to another https address without typing a key, Save. Then restore the default server and the key.</td><td>Warning asking to enter the key again; connection is no longer established until the key is entered again.</td><td></td><td></td></tr>
-<tr><td>6</td><td>[live write] Clear the saved key</td><td>Tick "Clear the saved key", Save. Then enter the key again.</td><td>After clearing, the connection message disappears; after entering the key again it is back.</td><td></td><td></td></tr>
+<tr><td>6</td><td>[live write] Clear the saved key</td><td>Tick "Clear" under the authentication key field (only one such checkbox must be shown), Save. Then enter the key again.</td><td>After clearing, the connection message disappears; after entering the key again it is back.</td><td></td><td></td></tr>
 <tr><td>7</td><td>[live write] "Link repositories" button</td><td>On the configuration page click "Link repositories".</td><td>Message with the number of repositories linked.</td><td></td><td></td></tr>
 <tr><td>8</td><td>[live write] Rights in profiles</td><td>Administration &gt; Profiles &gt; Technician &gt; Borgbase tab: grant Read, Update, Create, Purge. Save.</td><td>Rights saved; tab shows the four boxes ticked.</td><td></td><td></td></tr>
 </table>
@@ -47,6 +47,7 @@ records in GLPI; the <code>[destructive]</code> section at the end removes the p
 <tr><td>13</td><td>Unlinked computer: repository list</td><td>Open the computer whose name matches no repository, Borgbase tab.</td><td>"Not registered", a dropdown with the repositories not linked to any computer, and a "Link repository" button.</td><td></td><td></td></tr>
 <tr><td>14</td><td>[live write] Manual link</td><td>Choose a repository in the dropdown, click "Link repository".</td><td>Repository data is shown; History tab of the computer shows the link and the user.</td><td></td><td></td></tr>
 <tr><td>15</td><td>No double link</td><td>On another unlinked computer, open the tab: the repository of check 14 is not in the list.</td><td>Repositories already linked to a computer are never offered.</td><td></td><td></td></tr>
+<tr><td>16a</td><td>Plugin rights without computer update right</td><td>Give all Borgbase rights to a profile whose Computers right is read only (e.g. Observer); log in with it and open a linked and an unlinked computer.</td><td>Repository data visible, but no Reload/Unlink/Link buttons.</td><td></td><td></td></tr>
 <tr><td>16</td><td>Read-only user</td><td>Log in as the read-only user, open a linked computer, Borgbase tab.</td><td>Data visible, no Reload/Unlink buttons; on an unlinked computer no dropdown or Link button.</td><td></td><td></td></tr>
 <tr><td>17</td><td>User without the right</td><td>Remove the Borgbase right from the read-only user's profile, open a computer.</td><td>No Borgbase tab. Restore the right afterwards.</td><td></td><td></td></tr>
 <tr><td>18</td><td>Other entity</td><td>Log in as the technician of another entity, open a computer of their own entity.</td><td>Only computers of their entity are visible; their tab works as in checks 9–14.</td><td></td><td></td></tr>

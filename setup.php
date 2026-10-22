@@ -35,7 +35,7 @@ use GlpiPlugin\Borgbase\Config;
 use GlpiPlugin\Borgbase\Dashboard;
 use GlpiPlugin\Borgbase\Profile;
 
-define('PLUGIN_BORGBASE_VERSION', '3.0.0-beta.1');
+define('PLUGIN_BORGBASE_VERSION', '3.0.0-beta.2');
 define("PLUGIN_BORGBASE_MIN_GLPI_VERSION", "12.0.0");
 define("PLUGIN_BORGBASE_MAX_GLPI_VERSION", "12.1.0");
 define("PLUGIN_BORGBASE_ICON", "ti ti-cloud-upload");
