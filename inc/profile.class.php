@@ -68,6 +68,17 @@ class PluginBorgbaseProfile extends CommonDBTM
     }
 
     /**
+     * No list page for this itemtype (/plugins/borgbase/front/profile.php would
+     * otherwise be served by the core generic list controller)
+     *
+     * @return bool
+     */
+    public static function canView(): bool
+    {
+        return false;
+    }
+
+    /**
      * getAllRights
      *
      * @param  mixed $all

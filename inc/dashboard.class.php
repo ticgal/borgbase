@@ -46,12 +46,15 @@ class PluginBorgbaseDashboard
             $cards = [];
         }
 
+        // The card list is cached per language, not per user: the right
+        // to see the BorgBase account data is checked by each provider
+
         $cards['plugin_borgbase_usagehistory'] = [
             'widgettype'    => ['bar', 'line'],
             'label'         => __('Usage History', 'borgbase'),
             'group'         => 'Borgbase',
             'filters'       => ['dates'],
-            'provider'      => PluginBorgbaseProvider::class . '::usageHistory'
+            'provider'      => PluginBorgbaseProvider::class . '::usageHistory',
         ];
 
         $cards['plugin_borgbase_usedquotapercentage'] = [
@@ -59,7 +62,7 @@ class PluginBorgbaseDashboard
             'label'         => __('Used Quota', 'borgbase'),
             'group'         => 'Borgbase',
             'filters'       => [],
-            'provider'      => PluginBorgbaseProvider::class . '::usageQuotaPer'
+            'provider'      => PluginBorgbaseProvider::class . '::usageQuotaPer',
         ];
 
         $cards['plugin_borgbase_numberrepositories'] = [
@@ -67,7 +70,7 @@ class PluginBorgbaseDashboard
             'label'         => __('Number of Repositories', 'borgbase'),
             'group'         => 'Borgbase',
             'filters'       => [],
-            'provider'      => PluginBorgbaseProvider::class . '::numberrepositories'
+            'provider'      => PluginBorgbaseProvider::class . '::numberRepositories',
         ];
 
         $cards['plugin_borgbase_currentuse'] = [
@@ -75,7 +78,7 @@ class PluginBorgbaseDashboard
             'label'         => __('Current Use', 'borgbase'),
             'group'         => 'Borgbase',
             'filters'       => [],
-            'provider'      => PluginBorgbaseProvider::class . '::currentuse'
+            'provider'      => PluginBorgbaseProvider::class . '::currentUse',
         ];
 
         $cards['plugin_borgbase_numberoflinkedrepositories'] = [
@@ -83,7 +86,7 @@ class PluginBorgbaseDashboard
             'label'         => __('Number of Computers with a Repo Linked', 'borgbase'),
             'group'         => 'Borgbase',
             'filters'       => [],
-            'provider'      => PluginBorgbaseProvider::class . '::numberoflinkedrepositories'
+            'provider'      => PluginBorgbaseProvider::class . '::numberOfLinkedRepositories',
         ];
 
         return $cards;

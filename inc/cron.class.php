@@ -32,42 +32,81 @@
 /**
  * Cron
  */
-class PluginBorgbaseCron extends CommonDBTM
+class PluginBorgbaseCron extends CommonGLPI
 {
     /**
-    * cronInfo
-    *
-    * @param  string $name
-    * @return array
-    */
+     * {@inheritDoc}
+     */
+    public static function getTypeName($nb = 0): string
+    {
+        return 'Borgbase';
+    }
+
+    /**
+     * cronInfo
+     *
+     * @param  string $name
+     * @return array
+     */
     public static function cronInfo($name): array
     {
         switch ($name) {
             case 'borgbaseUpdate':
                 return ['description' => __('Update borgbase records', 'borgbase')];
         }
-        return array();
+        return [];
     }
 
     /**
-    * cronBorgbaseUpdate
-    *
-    * @param  CronTask|null $task for log (default NULL)
-    * @return boolean
-    */
-    public static function cronBorgbaseUpdate(?CronTask $task = null): bool
+     * Refresh the data of every linked repository
+     *
+     * @param  CronTask $task
+     * @return int 1 if something was refreshed, 0 otherwise
+     */
+    public static function cronBorgbaseUpdate(CronTask $task): int
     {
         /** @var \DBmysql $DB */
         global $DB;
 
         $borgbase = new PluginBorgbaseBorgbase();
-        $table = PluginBorgbaseBorgbase::getTable();
-        foreach ($DB->request(['SELECT' => 'borg_id', 'FROM' => $table]) as $id => $row) {
+        $updated = 0;
+        foreach ($DB->request(['SELECT' => 'borg_id', 'FROM' => PluginBorgbaseBorgbase::getTable()]) as $row) {
             if ($borgbase->reloadRepo($row['borg_id'])) {
-                $task->addVolume(1);
+                $updated++;
             }
         }
+        $task->addVolume($updated);
 
-        return true;
+        return $updated > 0 ? 1 : 0;
+    }
+
+    /**
+     * install
+     *
+     * @param  Migration $migration
+     * @return void
+     */
+    public static function install(Migration $migration): void
+    {
+        CronTask::register(
+            self::class,
+            'borgbaseUpdate',
+            DAY_TIMESTAMP,
+            [
+                'comment' => '',
+                'mode'    => CronTask::MODE_EXTERNAL,
+            ],
+        );
+    }
+
+    /**
+     * uninstall
+     *
+     * @param  Migration $migration
+     * @return void
+     */
+    public static function uninstall(Migration $migration): void
+    {
+        // Plugin crontasks are removed by the core on uninstall
     }
 }

@@ -29,39 +29,30 @@
  * ----------------------------------------------------------------------
  */
 
-$plugin = new Plugin();
-if (!$plugin->isInstalled('borgbase') || !$plugin->isActivated('borgbase')) {
+if (!Plugin::isPluginActive('borgbase')) {
     throw new Glpi\Exception\Http\NotFoundHttpException();
 }
 
-$borgbase = new PluginBorgbaseConfig();
-
 Session::checkRight('config', UPDATE);
-if (isset($_POST['reload'])) {
-    $borgbase->linkAvailableRepos();
-}
+
+$config = PluginBorgbaseConfig::getConfig();
 
 if (isset($_POST['update'])) {
-    $borgbase->check($_POST['id'], UPDATE);
-    $glpikey = new GLPIKey();
-    if ($_POST['apikey']) {
-        $_POST["apikey"] = $glpikey->encrypt($_POST["apikey"]);
-    } else {
-        unset($_POST['apikey']);
-    }
-    $borgbase->update($_POST);
+    $config->check(1, UPDATE);
+    $config->update(['id' => 1] + $_POST);
 
-    // Checking again, apikey needs to be updated
-    if (isset($_POST['apikey']) && $_POST['apikey']) {
-        $borgbase->linkAvailableRepos();
+    // A new key has been saved: link the matching repositories
+    if (!empty($_POST['apikey'])) {
+        $config->linkAvailableRepos();
     }
-
+    Html::back();
+} elseif (isset($_POST['reload'])) {
+    $config->check(1, UPDATE);
+    $linked = $config->linkAvailableRepos();
+    Session::addMessageAfterRedirect(
+        sprintf(_n('%d repository linked', '%d repositories linked', $linked, 'borgbase'), $linked),
+    );
     Html::back();
 }
 
-/** @var array $CFG_GLPI */
-global $CFG_GLPI;
-
-$redirect = $CFG_GLPI["root_doc"] . "/front/config.form.php";
-$redirect .= "?forcetab=" . urlencode('PluginBorgbaseConfig$1');
-Html::redirect($redirect);
+Html::redirect(\Config::getFormURL() . '?forcetab=' . urlencode(PluginBorgbaseConfig::class . '$1'));

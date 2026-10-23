@@ -36,17 +36,51 @@ use Glpi\Application\View\TemplateRenderer;
  */
 class PluginBorgbaseConfig extends CommonDBTM
 {
+    public const DEFAULT_SERVER = 'https://api.borgbase.com/graphql';
+
     public static $rightname = 'config';
+
+    /** The encrypted API key is never exposed (API, history, exports) */
+    public static $undisclosedFields = ['apikey'];
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function getTypeName($nb = 0): string
+    {
+        return 'Borgbase';
+    }
+
+    /**
+     * No list page for this itemtype (/plugins/borgbase/front/config.php would
+     * otherwise be served by the core generic list controller)
+     *
+     * @return bool
+     */
+    public static function canView(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Current configuration (single row, id 1)
+     *
+     * @return self
+     */
+    public static function getConfig(): self
+    {
+        $config = new self();
+        $config->getFromDB(1);
+        return $config;
+    }
 
     /**
      * {@inheritDoc}
      */
     public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0): string
     {
-        if (!$withtemplate) {
-            if ($item->getType() == 'Config') {
-                return self::createTabEntry('Borgbase');
-            }
+        if (!$withtemplate && $item instanceof \Config && Session::haveRight('config', UPDATE)) {
+            return self::createTabEntry(self::getTypeName());
         }
         return '';
     }
@@ -56,72 +90,67 @@ class PluginBorgbaseConfig extends CommonDBTM
      */
     public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool
     {
-        if ($item->getType() == 'Config') {
-            $config = new self();
-            $config->showFormExample();
+        if ($item instanceof \Config) {
+            self::getConfig()->showConfigForm();
             return true;
         }
         return false;
     }
 
     /**
-     * showFormExample
+     * Display the configuration form
      *
      * @return bool
      */
-    public function showFormExample(): bool
+    public function showConfigForm(): bool
     {
-        if (!Session::haveRight("config", UPDATE)) {
+        if (!$this->can(1, UPDATE)) {
             return false;
         }
 
-        $config = new PluginBorgbaseConfig();
-        $config->getFromDB(1);
+        $connected = str_contains(PluginBorgbaseBorgbase::request('{isAuthenticated}'), 'true');
 
-        $connect = false;
-        $msg = "<span class='text-muted'><i class='me-2 fa fa-check'></i>";
-        $msg .= __('Established connection', 'borgbase') . "</span>";
-        $options = [
-            'full_width' => true
-        ];
-
-        $labels = [
-            'server' => __('Server endpoint', 'borgbase'),
-            'apikey' => __('Authentication key', 'borgbase'),
-            'match' => __('Computer name matches exactly with repository name', 'borgbase'),
-            'reload' => __('Link repositories', 'borgbase')
-        ];
-
-        $borgbase = new PluginBorgbaseBorgbase();
-        $req = $borgbase->request('{isAuthenticated}');
-        if (str_contains($req, 'true')) {
-            $connect = true;
-        }
-
-        $placeholder = '';
-        if (!empty($config->fields['apikey'])) {
-            $placeholder = str_repeat('*', 20);
-        }
-
-        $templatePath = "@borgbase/config.html.twig";
-        TemplateRenderer::getInstance()->display(
-            $templatePath,
-            [
-                'item'          => $config,
-                'connection'    => $connect,
-                'labels'        => $labels,
-                'msg'           => $msg,
-                'options'       => $options,
-                'placeholder'   => $placeholder
-            ]
-        );
+        TemplateRenderer::getInstance()->display('@borgbase/config.html.twig', [
+            'item'        => $this,
+            'connection'  => $connected,
+            'has_apikey'  => !empty($this->fields['apikey']),
+            'params'      => ['canedit' => true],
+            'options'     => ['full_width' => true],
+            'labels'      => [
+                'server'      => __('Server endpoint', 'borgbase'),
+                'apikey'      => __('Authentication key', 'borgbase'),
+                'match'       => __('Computer name matches exactly with repository name', 'borgbase'),
+                'reload'      => __('Link repositories', 'borgbase'),
+                'connected'   => __('Established connection', 'borgbase'),
+                'unconnected' => __('Check API connection', 'borgbase'),
+            ],
+        ]);
 
         return true;
     }
 
     /**
-     * Summary of linkAvailableRepos
-     * @return int
+     * Server endpoint must be an https URL with a host
+     *
+     * @param  string $url
+     * @return bool
+     */
+    public static function isValidServer(string $url): bool
+    {
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            return false;
+        }
+        $parts = parse_url($url);
+        return strtolower($parts['scheme'] ?? '') === 'https'
+            && !empty($parts['host'])
+            && !isset($parts['user'])
+            && !isset($parts['pass']);
+    }
+
+    /**
+     * Link every repository whose name matches a computer name
+     *
+     * @return int number of linked repositories
      */
     public function linkAvailableRepos(): int
     {
@@ -129,39 +158,87 @@ class PluginBorgbaseConfig extends CommonDBTM
         global $DB;
 
         $borgbase = new PluginBorgbaseBorgbase();
-        $repoList = $borgbase->getRepoList();
         $linkedRepos = 0;
 
-        foreach ($repoList as $repo) {
-            $req = $DB->request([
+        foreach ($borgbase->getRepoList() as $repo) {
+            if (!PluginBorgbaseBorgbase::isValidRepo($repo)) {
+                continue;
+            }
+            $computer = $DB->request([
                 'SELECT' => 'id',
-                'FROM' => 'glpi_computers',
-                'WHERE' => [
-                    'name' => $repo['name']
-                ]
-            ]);
+                'FROM'   => 'glpi_computers',
+                'WHERE'  => [
+                    'name'        => $repo['name'],
+                    'is_deleted'  => 0,
+                    'is_template' => 0,
+                ],
+                'LIMIT'  => 1,
+            ])->current();
 
-            $computer = $req->current();
-            if ($computer) {
-                $linked = $borgbase->linkRepo($repo, $computer['id']);
-                if ($linked) {
-                    $linkedRepos++;
-                }
+            if ($computer && $borgbase->linkRepo($repo, (int) $computer['id'])) {
+                $linkedRepos++;
             }
         }
 
         return $linkedRepos;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function prepareInputForUpdate($input): false|array
     {
-        if (isset($input['_blank_apikey']) && $input['_blank_apikey']) {
-            $input['apikey'] = '';
+        $clean = ['id' => 1];
+
+        if (array_key_exists('match', $input)) {
+            $clean['match'] = (int) (bool) $input['match'];
         }
-        return $input;
+
+        $server_changed = false;
+        if (array_key_exists('server', $input)) {
+            $server = trim((string) $input['server']);
+            if (!self::isValidServer($server)) {
+                Session::addMessageAfterRedirect(
+                    __('The server endpoint must be a valid https URL', 'borgbase'),
+                    false,
+                    ERROR,
+                );
+                return false;
+            }
+            $clean['server'] = $server;
+            $server_changed = $server !== ($this->fields['server'] ?? '');
+        }
+
+        if (!empty($input['apikey'])) {
+            $clean['apikey'] = (new GLPIKey())->encrypt((string) $input['apikey']);
+        } elseif (!empty($input['_blank_apikey'])) {
+            $clean['apikey'] = '';
+        } elseif ($server_changed && !empty($this->fields['apikey'])) {
+            // Never send the stored key to a server it was not entered for
+            $clean['apikey'] = '';
+            Session::addMessageAfterRedirect(
+                __('The server endpoint has changed: enter the authentication key again', 'borgbase'),
+                false,
+                WARNING,
+            );
+        }
+
+        return $clean;
     }
 
-    public static function getIcon()
+    /**
+     * {@inheritDoc}
+     */
+    public function prepareInputForAdd($input): false|array
+    {
+        // Single configuration row, created at install
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public static function getIcon(): string
     {
         return PLUGIN_BORGBASE_ICON;
     }
@@ -184,26 +261,25 @@ class PluginBorgbaseConfig extends CommonDBTM
         $table = self::getTable();
         if (!$DB->tableExists($table)) {
             $migration->displayMessage("Installing $table");
-            $query = "CREATE TABLE IF NOT EXISTS $table (
-				`id` int {$default_key_sign} NOT NULL auto_increment,
-				`server` VARCHAR(512) NOT NULL DEFAULT '',
-				`apikey` VARCHAR(640) NOT NULL DEFAULT '',
-				`match` tinyint(1) NOT NULL DEFAULT '0',
-				`debug` tinyint(1) NOT NULL DEFAULT '0',
-				PRIMARY KEY (`id`)
-			)ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
+            $query = "CREATE TABLE IF NOT EXISTS `$table` (
+                `id` int {$default_key_sign} NOT NULL auto_increment,
+                `server` VARCHAR(512) NOT NULL DEFAULT '',
+                `apikey` VARCHAR(640) NOT NULL DEFAULT '',
+                `match` tinyint(1) NOT NULL DEFAULT '0',
+                `debug` tinyint(1) NOT NULL DEFAULT '0',
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation} ROW_FORMAT=DYNAMIC;";
             $DB->doQuery($query);
+        }
 
-            // Default config
-            $DB->insert(
-                $table,
-                [
-                    'server' => 'https://api.borgbase.com/graphql',
-                    'apikey' => '',
-                    'match' => '1',
-                    'debug' => '0',
-                ]
-            );
+        if (countElementsInTable($table, ['id' => 1]) === 0) {
+            $DB->insert($table, [
+                'id'     => 1,
+                'server' => self::DEFAULT_SERVER,
+                'apikey' => '',
+                'match'  => 1,
+                'debug'  => 0,
+            ]);
         }
     }
 
@@ -219,7 +295,9 @@ class PluginBorgbaseConfig extends CommonDBTM
         global $DB;
 
         $table = self::getTable();
-        //$migration->displayMessage('Uninstalling ' . $table);
-        //$DB->queryOrDie("DROP TABLE `$table`", $DB->error());
+        if ($DB->tableExists($table)) {
+            $migration->displayMessage('Uninstalling ' . $table);
+            $DB->dropTable($table);
+        }
     }
 }

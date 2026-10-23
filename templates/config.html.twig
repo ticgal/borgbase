@@ -28,64 +28,59 @@
 #}
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
-{% import 'components/form/buttons.html.twig' as buttons %}
 
-{% set no_header = no_header|default(not item.isNewItem() and not _get._in_modal|default(false)) %}
-{% set bg = '' %}
-{% if item.isDeleted() %}
-{% set bg = 'asset-deleted' %}
-{% endif %}
-
-<div class="asset {{ bg }}">
-
+<div class="asset">
     {{ include('components/form/header.html.twig', {'in_twig': true, 'no_header': true}) }}
-    {% set params = params ?? [] %}
 
     <div class="row">
         <div class="row ps-4">
 
-            {% if item.isField('server') %}
-                {{ fields.textField(
-                    'server',
-                    item.fields['server'],
-                    labels['server'],
-                    options
-                ) }}
-            {% endif %}
+            {{ fields.textField(
+                'server',
+                item.fields['server'],
+                labels['server'],
+                options
+            ) }}
 
-            {% if item.isField('apikey') %}
-                {{ fields.passwordField(
-                    'apikey',
-                    '',
-                    labels['apikey'],
-                    options|merge({additional_attributes: {'placeholder': placeholder}}),
-                ) }}
-            {% endif %}
+            {{ fields.passwordField(
+                'apikey',
+                '',
+                labels['apikey'],
+                options|merge({
+                    additional_attributes: {
+                        'placeholder': has_apikey ? '********************' : '',
+                        'autocomplete': 'new-password'
+                    }
+                })
+            ) }}
 
             {% if connection %}
                 {{ fields.htmlField(
                     'connection',
-                    msg,
+                    '<span class="text-success"><i class="me-2 ti ti-check"></i>' ~ labels['connected']|e ~ '</span>',
                     ''
                 ) }}
 
                 <div class="form-field row col-6 mb-2 pe-0 justify-content-end align-items-center">
                     <button class="btn w-auto" type="submit" name="reload" value="1">
-                        <i class="fa-solid fa-rotate"></i>
-                        <span>{{ _x('button', labels['reload']) }}</span>
+                        <i class="ti ti-refresh"></i>
+                        <span>{{ labels['reload'] }}</span>
                     </button>
                 </div>
-            {% endif %}
-
-            {% if item.isField('match') %}
-                {{
-                    fields.dropdownYesNo(
-                    'match',
-                    item.fields['match'],
-                    labels['match'],
-                    options
+            {% elseif has_apikey %}
+                {{ fields.htmlField(
+                    'connection',
+                    '<span class="text-danger"><i class="me-2 ti ti-x"></i>' ~ labels['unconnected']|e ~ '</span>',
+                    ''
                 ) }}
             {% endif %}
+
+            {{ fields.dropdownYesNo(
+                'match',
+                item.fields['match'],
+                labels['match'],
+                options
+            ) }}
 
         </div>
     </div>

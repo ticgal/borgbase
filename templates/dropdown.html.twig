@@ -28,44 +28,35 @@
 #}
 
 {% import 'components/form/fields_macros.html.twig' as fields %}
-{% import 'components/form/buttons.html.twig' as buttons %}
 
-{% set no_header = no_header|default(not item.isNewItem() and not _get._in_modal|default(false)) %}
-{% set bg = '' %}
-{% if item.isDeleted() %}
-{% set bg = 'asset-deleted' %}
-{% endif %}
+<div class="asset">
+    <form method="post" action="{{ action }}" data-submit-once>
+        <input type="hidden" name="id" value="{{ value }}" />
+        <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}" />
 
-<div class="asset {{ bg }}">
+        <div class="row">
+            <div class="row ps-4">
+                <h2>{{ labels['notRegistered'] }}</h2>
 
-    {{ include('components/form/header.html.twig', {'in_twig': true, 'no_header': true}) }}
-    {% set params = params ?? [] %}
-    {% set field_options = {
-    'locked_fields': item.getLockedFields(),
-    } %}
-
-    <div class="row">
-        <div class="row ps-4">
-
-            <h2>{{ labels['notRegistered'] }}</h2>
-
-            {% if canCreate %}
-            <input type='hidden' name='assoc'>
-            <input type='hidden' name='id' value={{value}}>
-
-            {{ fields.dropdownArrayField(
-            'repoId',
-            value,
-            elements,
-            labels['selectRepo'],
-            field_options
-            ) }}
-            {% endif %}
-
+                {% if canCreate %}
+                    {{ fields.dropdownArrayField(
+                        'repoId',
+                        '',
+                        elements,
+                        labels['selectRepo'],
+                        {'display_emptychoice': true}
+                    ) }}
+                {% endif %}
+            </div>
         </div>
-    </div>
 
-    {% if canCreate %}
-    {{ include('components/form/buttons.html.twig') }}
-    {% endif %}
+        {% if canCreate %}
+            <div class="card-body mx-n2 mb-4 border-top d-flex flex-row-reverse align-items-start flex-wrap">
+                <button class="btn btn-primary me-2" type="submit" name="assoc" value="1">
+                    <i class="ti ti-link"></i>
+                    <span>{{ labels['link'] }}</span>
+                </button>
+            </div>
+        {% endif %}
+    </form>
 </div>

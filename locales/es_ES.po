@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Borgbase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-23 13:23+0100\n"
+"POT-Creation-Date: 2026-10-21 16:32+0200\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10,131 +10,180 @@ msgstr ""
 "X-Generator: Localazy (https://localazy.com)\n"
 "Plural-Forms: nplurals=2; plural=(n==1) ? 0 : 1;\n"
 
-#: setup.php:152
-msgid "Installed / not configured"
-msgstr "Instalado / no configurado"
+#: front/borgbase.form.php:83 inc/config.class.php:125
+msgid "Check API connection"
+msgstr "Comprueba la conexión con la API"
 
-#: inc/borgbase.class.php:537
+#: front/borgbase.form.php:97
+msgid "Repository not found"
+msgstr "Repositorio no encontrado"
+
+#: front/borgbase.form.php:101
+msgid "The repository or the computer is already linked"
+msgstr "El repositorio o el ordenador ya están vinculados"
+
+#: front/config.form.php:53
+#, php-format
+msgid "%d repository linked"
+msgid_plural "%d repositories linked"
+msgstr[0] "%d repositorio vinculado"
+msgstr[1] "%d repositorios vinculados"
+
+#: inc/borgbase.class.php:544
+#, php-format
+msgid "%s, automatically linked"
+msgstr "%s, vinculado automáticamente"
+
+#: inc/borgbase.class.php:606
 msgid "Created on"
 msgstr "Creado el"
 
-#: inc/borgbase.class.php:538
+#: inc/borgbase.class.php:607
 msgid "Last update on"
 msgstr "Última actualización el"
 
-#: inc/borgbase.class.php:545
+#: inc/borgbase.class.php:614
 msgid "Not registered"
 msgstr "No registrado"
 
-#: inc/borgbase.class.php:546
+#: inc/borgbase.class.php:615
 msgid "Select a repository"
 msgstr "Seleccione un repositorio"
 
-#: inc/borgbase.class.php:547
+#: inc/borgbase.class.php:616
+msgid "Link repository"
+msgstr "Vincular el repositorio"
+
+#: inc/borgbase.class.php:617
 msgid "Name"
 msgstr "Nombre"
 
-#: inc/borgbase.class.php:548
+#: inc/borgbase.class.php:618 inc/borgbase.class.php:727
 msgid "Alert Days"
 msgstr "Días de alerta"
 
-#: inc/borgbase.class.php:549
+#: inc/borgbase.class.php:619
 msgid "Version"
 msgstr "Versión"
 
-#: inc/borgbase.class.php:550
+#: inc/borgbase.class.php:620
 msgid "Region"
 msgstr "Región"
 
-#: inc/borgbase.class.php:551
+#: inc/borgbase.class.php:621
 msgid "Compaction Interval"
 msgstr "Intervalo de compactación"
 
-#: inc/borgbase.class.php:552
+#: inc/borgbase.class.php:622
 msgid "Compaction Hour"
 msgstr "Hora de compactación"
 
-#: inc/borgbase.class.php:553
+#: inc/borgbase.class.php:623
 msgid "Encryption"
 msgstr "Cifrado"
 
-#: inc/borgbase.class.php:554
+#: inc/borgbase.class.php:624 inc/borgbase.class.php:716
 msgid "Current Usage"
 msgstr "Uso actual"
 
-#: inc/borgbase.class.php:555
+#: inc/borgbase.class.php:625 inc/borgbase.class.php:685
 msgid "Creation Date"
 msgstr "Fecha de creación"
 
-#: inc/borgbase.class.php:556
+#: inc/borgbase.class.php:626
 msgid "Last Backup"
 msgstr "Último respaldo"
 
-#: inc/borgbase.class.php:557
+#: inc/borgbase.class.php:627
 msgid "Confirm the final deletion?"
 msgstr "¿Quieres confirmar la eliminación final?"
 
-#: inc/borgbase.class.php:558
+#: inc/borgbase.class.php:628
 msgid "Unlink repository"
 msgstr "Desvincular el repositorio"
 
-#: inc/borgbase.class.php:559
+#: inc/borgbase.class.php:629
 msgid "Reload information"
 msgstr "Recargar información"
 
-#: inc/config.class.php:104
-msgid "Established connection"
-msgstr "Conexión establecida"
+#: inc/borgbase.class.php:695
+msgid "Last Modification"
+msgstr "Última modificación"
 
-#: inc/config.class.php:110
+#: inc/borgbase.class.php:705 inc/borgbase.class.php:750
+msgid "Encrypted"
+msgstr "Cifrado"
+
+#: inc/config.class.php:120
 msgid "Server endpoint"
 msgstr "Punto de acceso al servidor"
 
-#: inc/config.class.php:111
+#: inc/config.class.php:121
 msgid "Authentication key"
 msgstr "Clave de autenticación"
 
-#: inc/config.class.php:112
+#: inc/config.class.php:122
 msgid "Computer name matches exactly with repository name"
 msgstr ""
 "El nombre del ordenador coincide exactamente con el nombre del repositorio"
 
-#: inc/config.class.php:113
+#: inc/config.class.php:123
 msgid "Link repositories"
 msgstr "Vincular los repositorios"
 
-#: inc/cron.class.php:48
+#: inc/config.class.php:124
+msgid "Established connection"
+msgstr "Conexión establecida"
+
+#: inc/config.class.php:202
+msgid "The server endpoint must be a valid https URL"
+msgstr "El endpoint del servidor debe ser una URL https válida"
+
+#: inc/config.class.php:220
+msgid "The server endpoint has changed: enter the authentication key again"
+msgstr ""
+"El endpoint del servidor ha cambiado: introduce de nuevo la clave de "
+"autenticación"
+
+#: inc/cron.class.php:55
 msgid "Update borgbase records"
 msgstr "Actualizar registros de borgbase"
 
-#: inc/dashboard.class.php:41
+#: inc/dashboard.class.php:54
 msgid "Usage History"
 msgstr "Historial de uso"
 
-#: inc/dashboard.class.php:49
+#: inc/dashboard.class.php:62
 msgid "Used Quota"
 msgstr "Cuota usada"
 
-#: inc/dashboard.class.php:57 inc/provider.class.php:118
+#: inc/dashboard.class.php:70 inc/provider.class.php:151
 msgid "Number of Repositories"
 msgstr "Número de Repositorios"
 
-#: inc/dashboard.class.php:65 inc/provider.class.php:132
+#: inc/dashboard.class.php:78 inc/provider.class.php:164
 msgid "Current Use"
 msgstr "Uso actual"
 
-#: inc/dashboard.class.php:73 inc/provider.class.php:176
+#: inc/dashboard.class.php:86 inc/provider.class.php:221
 msgid "Number of Computers with a Repo Linked"
 msgstr "Número de equipos con un repositorio vinculado"
 
-#: inc/provider.class.php:89
+#: inc/provider.class.php:63
+msgid "Total Usage History"
+msgstr "Historial de uso total"
+
+#: inc/provider.class.php:100
+msgid "Total Usage Percentage"
+msgstr "Porcentaje de uso total"
+
+#: inc/provider.class.php:115
 msgid "Storage usage"
 msgstr "Uso del almacenamiento"
 
-#: inc/provider.class.php:93
+#: inc/provider.class.php:123
 msgid "Free storage"
 msgstr "Almacenamiento libre"
 
-#: inc/provider.class.php:104
-msgid "Total Usage Percentage"
-msgstr "Porcentaje de uso total"
+#~ msgid "Clear the saved key"
+#~ msgstr "Borrar la clave guardada"

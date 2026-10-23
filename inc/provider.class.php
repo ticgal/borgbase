@@ -29,11 +29,29 @@
  * ----------------------------------------------------------------------
  */
 
+use Glpi\DBAL\QuerySubQuery;
+
 /**
- * Provider
+ * Dashboard providers
  */
 class PluginBorgbaseProvider
 {
+    /**
+     * Usage rows from the API, newest last
+     *
+     * @return array
+     */
+    private static function getUsages(): array
+    {
+        if (!Session::haveRight(PluginBorgbaseBorgbase::$rightname, READ)) {
+            return [];
+        }
+        return array_values(array_filter(
+            (new PluginBorgbaseBorgbase())->getCurrentUsage(),
+            static fn($usage) => is_array($usage) && is_numeric($usage['usedGb'] ?? null),
+        ));
+    }
+
     /**
      * usageHistory
      *
@@ -42,37 +60,33 @@ class PluginBorgbaseProvider
      */
     public static function usageHistory($params = []): array
     {
+        $label = 'Borgbase - ' . __('Total Usage History', 'borgbase') . ' (GB)';
+        if (!Session::haveRight(PluginBorgbaseBorgbase::$rightname, READ)) {
+            // Line/bar widgets need a list in 'data' (see below)
+            return ['data' => [], 'label' => $label, 'icon' => PluginBorgbaseBorgbase::getIcon()];
+        }
+
         $data = [];
 
-        $borgbase = new PluginBorgbaseBorgbase();
-        $usages = $borgbase->getCurrentUsage();
-
+        $usages = self::getUsages();
         // New rows last
         krsort($usages);
 
         foreach ($usages as $usage) {
-            $date = date('d/m', strtotime($usage['date']));
-            $use = number_format($usage['usedGb'], 2, '.', '');
-
+            $time = strtotime((string) ($usage['date'] ?? ''));
             $data[] = [
-                'number' => $use,
-                'label' => $date,
+                'number' => number_format((float) $usage['usedGb'], 2, '.', ''),
+                'label'  => $time ? date('d/m', $time) : '',
             ];
         }
 
-        if (count($data) === 0) {
-            $data = [
-                'nodata' => true
-            ];
-        }
-
-        $provide = [
+        // Line/bar widgets iterate 'data' as a list: an empty list renders an
+        // empty chart, ['nodata' => true] makes Widget::simpleLine() fail
+        return [
             'data'  => $data,
-            'label' => 'Borgbase - ' . __('Total Usage History') . ' (GB)',
-            'icon'  => PluginBorgbaseBorgbase::getIcon()
+            'label' => $label,
+            'icon'  => PluginBorgbaseBorgbase::getIcon(),
         ];
-
-        return $provide;
     }
 
     /**
@@ -83,38 +97,41 @@ class PluginBorgbaseProvider
      */
     public static function usageQuotaPer($params = []): array
     {
-        $data = [];
-
-        $borgbase = new PluginBorgbaseBorgbase();
-        $usages = $borgbase->getCurrentUsage();
-
-        $currentUsage = $usages[0]['usedGb'];
-        $limitUsage = $usages[0]['plan']['includedSize'] / 1000; //GB
-
-        $calc = ($currentUsage * 100) / $limitUsage;
-        $percentage = number_format($calc, 2);
-
-        $data[] = [
-            'number' => $percentage,
-            'label' => __('Storage usage', 'borgbase'),
-        ];
-
-        // percentage can be greater than 100
-        // borgbase has a plan of 1TB up to flexible 4TB for example
-        if ($percentage < 100) {
-            $data[] = [
-                'number' => $limitUsage - $currentUsage,
-                'label' => __('Free storage', 'borgbase'),
-            ];
+        $label = 'Borgbase - ' . __('Total Usage Percentage', 'borgbase') . ' (%)';
+        if (!Session::haveRight(PluginBorgbaseBorgbase::$rightname, READ)) {
+            return ['data' => ['nodata' => true], 'label' => $label, 'icon' => PluginBorgbaseBorgbase::getIcon()];
         }
 
-        $provide = [
-            'data'      => $data,
-            'label'     => 'Borgbase - ' . __('Total Usage Percentage', 'borgbase') . ' (%)',
-            'icon'      => PluginBorgbaseBorgbase::getIcon()
-        ];
+        $data = [];
 
-        return $provide;
+        $usages = self::getUsages();
+        $currentUsage = (float) ($usages[0]['usedGb'] ?? 0);
+        $limitUsage = (float) ($usages[0]['plan']['includedSize'] ?? 0) / 1000; //GB
+
+        if ($limitUsage > 0) {
+            $percentage = ($currentUsage * 100) / $limitUsage;
+            $data[] = [
+                'number' => number_format($percentage, 2, '.', ''),
+                'label'  => __('Storage usage', 'borgbase'),
+            ];
+
+            // percentage can be greater than 100
+            // borgbase has a plan of 1TB up to flexible 4TB for example
+            if ($percentage < 100) {
+                $data[] = [
+                    'number' => $limitUsage - $currentUsage,
+                    'label'  => __('Free storage', 'borgbase'),
+                ];
+            }
+        } else {
+            $data = ['nodata' => true];
+        }
+
+        return [
+            'data'      => $data,
+            'label'     => $label,
+            'icon'      => PluginBorgbaseBorgbase::getIcon(),
+        ];
     }
 
     /**
@@ -125,16 +142,15 @@ class PluginBorgbaseProvider
      */
     public static function numberRepositories($params = []): array
     {
-        $borgbase = new PluginBorgbaseBorgbase();
-        $numRepos = count($borgbase->getRepoList());
+        $numRepos = Session::haveRight(PluginBorgbaseBorgbase::$rightname, READ)
+            ? count((new PluginBorgbaseBorgbase())->getRepoList())
+            : 0;
 
-        $provide = [
+        return [
             'number'    => $numRepos,
             'label'     => 'Borgbase - ' . __('Number of Repositories', 'borgbase'),
-            'icon'      => PluginBorgbaseBorgbase::getIcon()
+            'icon'      => PluginBorgbaseBorgbase::getIcon(),
         ];
-
-        return $provide;
     }
 
     /**
@@ -145,20 +161,20 @@ class PluginBorgbaseProvider
      */
     public static function currentUse($params = []): array
     {
-        $borgbase = new PluginBorgbaseBorgbase();
-        $currentUse = $borgbase->getCurrentUsage()[0]['usedGb'];
+        $label = 'Borgbase - ' . __('Current Use', 'borgbase') . ' (GB)';
+        if (!Session::haveRight(PluginBorgbaseBorgbase::$rightname, READ)) {
+            return ['number' => 0, 'label' => $label, 'icon' => PluginBorgbaseBorgbase::getIcon()];
+        }
 
-        $provide = [
-            'number'    => $currentUse,
-            'label'     => 'Borgbase - ' . __('Current Use', 'borgbase') . ' (GB)',
-            'icon'  => PluginBorgbaseBorgbase::getIcon()
+        return [
+            'number'    => (float) (self::getUsages()[0]['usedGb'] ?? 0),
+            'label'     => $label,
+            'icon'      => PluginBorgbaseBorgbase::getIcon(),
         ];
-
-        return $provide;
     }
 
     /**
-     * numberOfLinkedRepositories
+     * Computers of the active entities with a linked repository
      *
      * @param  mixed $params
      * @return array
@@ -168,45 +184,42 @@ class PluginBorgbaseProvider
         /** @var \DBmysql $DB */
         global $DB;
 
-        $sub_query = new \Glpi\DBAL\QuerySubQuery([
-            'SELECT' => 'items_id',
-            'FROM'   => PluginBorgbaseRelation::getTable()
-        ]);
-
-        $iterator = $DB->request([
-            'SELECT' => ['COUNT DISTINCT' => 'id as count'],
-            'FROM' => 'glpi_computers',
-            'WHERE' => [
-                'id' => $sub_query
-            ]
-        ]);
-
-        $result = $iterator->current();
-        $linkedRepositories = $result['count'];
-
-        $search_url = Computer::getSearchURL();
-        $search_criteria = [];
+        $linkedRepositories = 0;
         if (Session::haveRight(PluginBorgbaseBorgbase::$rightname, READ)) {
-            $search_criteria['criteria'][] = [
-                'link'       => '',
-                'field'      => PluginBorgbaseBorgbase::$sopt,
-                'searchtype' => 'notcontains',
-                'value'      => 'null'
-            ];
+            $result = $DB->request([
+                'SELECT' => ['COUNT DISTINCT' => 'id as count'],
+                'FROM'   => Computer::getTable(),
+                'WHERE'  => [
+                    'id'          => new QuerySubQuery([
+                        'SELECT' => 'items_id',
+                        'FROM'   => PluginBorgbaseRelation::getTable(),
+                        'WHERE'  => ['itemtype' => Computer::class],
+                    ]),
+                    'is_deleted'  => 0,
+                    'is_template' => 0,
+                ] + getEntitiesRestrictCriteria(Computer::getTable()),
+            ])->current();
+            $linkedRepositories = (int) ($result['count'] ?? 0);
         }
 
-        $url = $search_url . (str_contains($search_url, '?') ? '&' : '?') . Toolbox::append_params([
-            $search_criteria,
+        $search_url = Computer::getSearchURL();
+        $search_criteria = [
+            'criteria' => [
+                [
+                    'link'       => 'AND',
+                    'field'      => PluginBorgbaseBorgbase::$sopt,
+                    'searchtype' => 'notcontains',
+                    'value'      => 'null',
+                ],
+            ],
             'reset' => 'reset',
-        ]);
-
-        $provide = [
-            'number'    => $linkedRepositories,
-            'url'       => $url,
-            'label'     => 'Borgbase - ' . __('Number of Computers with a Repo Linked', 'borgbase'),
-            'icon'      => PluginBorgbaseBorgbase::getIcon()
         ];
 
-        return $provide;
+        return [
+            'number'    => $linkedRepositories,
+            'url'       => $search_url . (str_contains($search_url, '?') ? '&' : '?') . Toolbox::append_params($search_criteria),
+            'label'     => 'Borgbase - ' . __('Number of Computers with a Repo Linked', 'borgbase'),
+            'icon'      => PluginBorgbaseBorgbase::getIcon(),
+        ];
     }
 }
