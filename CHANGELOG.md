@@ -1,6 +1,25 @@
 # Borgbase - GLPI Plugin CHANGELOG
 
-## [2.0.1] - 2026-10-09
+## [3.0.0] - 2026-11-03
+_First release for GLPI 12. Includes all the fixes of 2.0.1._
+
+### Features
+- GLPI 12 support
+- Classes moved to `src/` (`GlpiPlugin\Borgbase\*`); the legacy `PluginBorgbase*` names remain as deprecated aliases
+
+### Changed
+- BorgBase API calls use GLPI's HTTP client (proxy settings honoured, 10 s timeout, no redirects). Endpoints on a
+  private network require `GLPI_SERVERSIDE_URL_ALLOWED_PRIVATE_NETWORKS_CONTEXTS` (see README)
+- The configuration page asks for re-authentication, like GLPI's own configuration
+- The Reload, Unlink and Link buttons are only shown to users who can update the computer
+- Icons switched to Tabler
+
+### Fixed
+- Purging a computer left its repository link behind, so that repository could never be linked again; existing orphan
+  links are removed on update
+- Usage above 1 PB was shown without unit
+
+## [2.0.1] - 2026-10-23
 ### Security
 - API queries no longer concatenate the computer name or the repository id: GraphQL variables are used and repository
   ids are validated (a crafted computer name could send arbitrary GraphQL to the BorgBase account)

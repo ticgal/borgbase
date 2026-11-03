@@ -1,4 +1,4 @@
-# BORGBASE Glpi Plugin.
+# borgbase Glpi Plugin.
 # Copyright (C) 2026 TICGAL
 # This file is distributed under the same license as the PACKAGE package.
 # TICGAL, 2026
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 16:32+0200\n"
+"POT-Creation-Date: 2026-10-22 15:05+0200\n"
 "PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,174 +18,174 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: front/borgbase.form.php:83 inc/config.class.php:125
+#: src/Dashboard.php:56
+msgid "Usage History"
+msgstr ""
+
+#: src/Dashboard.php:64
+msgid "Used Quota"
+msgstr ""
+
+#: src/Dashboard.php:72 src/Provider.php:156
+msgid "Number of Repositories"
+msgstr ""
+
+#: src/Dashboard.php:80 src/Provider.php:169
+msgid "Current Use"
+msgstr ""
+
+#: src/Dashboard.php:88 src/Provider.php:226
+msgid "Number of Computers with a Repo Linked"
+msgstr ""
+
+#: src/Provider.php:68
+msgid "Total Usage History"
+msgstr ""
+
+#: src/Provider.php:105
+msgid "Total Usage Percentage"
+msgstr ""
+
+#: src/Provider.php:120
+msgid "Storage usage"
+msgstr ""
+
+#: src/Provider.php:128
+msgid "Free storage"
+msgstr ""
+
+#: src/Borgbase.php:544
+#, php-format
+msgid "%s, automatically linked"
+msgstr ""
+
+#: src/Borgbase.php:606
+msgid "Created on"
+msgstr ""
+
+#: src/Borgbase.php:607
+msgid "Last update on"
+msgstr ""
+
+#: src/Borgbase.php:614
+msgid "Not registered"
+msgstr ""
+
+#: src/Borgbase.php:615
+msgid "Select a repository"
+msgstr ""
+
+#: src/Borgbase.php:616
+msgid "Link repository"
+msgstr ""
+
+#: src/Borgbase.php:617
+msgid "Name"
+msgstr ""
+
+#: src/Borgbase.php:618 src/Borgbase.php:727
+msgid "Alert Days"
+msgstr ""
+
+#: src/Borgbase.php:619
+msgid "Version"
+msgstr ""
+
+#: src/Borgbase.php:620
+msgid "Region"
+msgstr ""
+
+#: src/Borgbase.php:621
+msgid "Compaction Interval"
+msgstr ""
+
+#: src/Borgbase.php:622
+msgid "Compaction Hour"
+msgstr ""
+
+#: src/Borgbase.php:623
+msgid "Encryption"
+msgstr ""
+
+#: src/Borgbase.php:624 src/Borgbase.php:716
+msgid "Current Usage"
+msgstr ""
+
+#: src/Borgbase.php:625 src/Borgbase.php:685
+msgid "Creation Date"
+msgstr ""
+
+#: src/Borgbase.php:626
+msgid "Last Backup"
+msgstr ""
+
+#: src/Borgbase.php:627
+msgid "Confirm the final deletion?"
+msgstr ""
+
+#: src/Borgbase.php:628
+msgid "Unlink repository"
+msgstr ""
+
+#: src/Borgbase.php:629
+msgid "Reload information"
+msgstr ""
+
+#: src/Borgbase.php:695
+msgid "Last Modification"
+msgstr ""
+
+#: src/Borgbase.php:705 src/Borgbase.php:750
+msgid "Encrypted"
+msgstr ""
+
+#: src/Config.php:136
+msgid "Server endpoint"
+msgstr ""
+
+#: src/Config.php:137
+msgid "Authentication key"
+msgstr ""
+
+#: src/Config.php:138
+msgid "Computer name matches exactly with repository name"
+msgstr ""
+
+#: src/Config.php:139
+msgid "Link repositories"
+msgstr ""
+
+#: src/Config.php:140
+msgid "Established connection"
+msgstr ""
+
+#: src/Config.php:141 front/borgbase.form.php:84
 msgid "Check API connection"
 msgstr ""
 
-#: front/borgbase.form.php:97
-msgid "Repository not found"
+#: src/Config.php:218
+msgid "The server endpoint must be a valid https URL"
 msgstr ""
 
-#: front/borgbase.form.php:101
-msgid "The repository or the computer is already linked"
+#: src/Config.php:236
+msgid "The server endpoint has changed: enter the authentication key again"
 msgstr ""
 
-#: front/config.form.php:53
+#: src/Cron.php:61
+msgid "Update borgbase records"
+msgstr ""
+
+#: front/config.form.php:56
 #, php-format
 msgid "%d repository linked"
 msgid_plural "%d repositories linked"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/borgbase.class.php:544
-#, php-format
-msgid "%s, automatically linked"
+#: front/borgbase.form.php:98
+msgid "Repository not found"
 msgstr ""
 
-#: inc/borgbase.class.php:606
-msgid "Created on"
-msgstr ""
-
-#: inc/borgbase.class.php:607
-msgid "Last update on"
-msgstr ""
-
-#: inc/borgbase.class.php:614
-msgid "Not registered"
-msgstr ""
-
-#: inc/borgbase.class.php:615
-msgid "Select a repository"
-msgstr ""
-
-#: inc/borgbase.class.php:616
-msgid "Link repository"
-msgstr ""
-
-#: inc/borgbase.class.php:617
-msgid "Name"
-msgstr ""
-
-#: inc/borgbase.class.php:618 inc/borgbase.class.php:727
-msgid "Alert Days"
-msgstr ""
-
-#: inc/borgbase.class.php:619
-msgid "Version"
-msgstr ""
-
-#: inc/borgbase.class.php:620
-msgid "Region"
-msgstr ""
-
-#: inc/borgbase.class.php:621
-msgid "Compaction Interval"
-msgstr ""
-
-#: inc/borgbase.class.php:622
-msgid "Compaction Hour"
-msgstr ""
-
-#: inc/borgbase.class.php:623
-msgid "Encryption"
-msgstr ""
-
-#: inc/borgbase.class.php:624 inc/borgbase.class.php:716
-msgid "Current Usage"
-msgstr ""
-
-#: inc/borgbase.class.php:625 inc/borgbase.class.php:685
-msgid "Creation Date"
-msgstr ""
-
-#: inc/borgbase.class.php:626
-msgid "Last Backup"
-msgstr ""
-
-#: inc/borgbase.class.php:627
-msgid "Confirm the final deletion?"
-msgstr ""
-
-#: inc/borgbase.class.php:628
-msgid "Unlink repository"
-msgstr ""
-
-#: inc/borgbase.class.php:629
-msgid "Reload information"
-msgstr ""
-
-#: inc/borgbase.class.php:695
-msgid "Last Modification"
-msgstr ""
-
-#: inc/borgbase.class.php:705 inc/borgbase.class.php:750
-msgid "Encrypted"
-msgstr ""
-
-#: inc/config.class.php:120
-msgid "Server endpoint"
-msgstr ""
-
-#: inc/config.class.php:121
-msgid "Authentication key"
-msgstr ""
-
-#: inc/config.class.php:122
-msgid "Computer name matches exactly with repository name"
-msgstr ""
-
-#: inc/config.class.php:123
-msgid "Link repositories"
-msgstr ""
-
-#: inc/config.class.php:124
-msgid "Established connection"
-msgstr ""
-
-#: inc/config.class.php:202
-msgid "The server endpoint must be a valid https URL"
-msgstr ""
-
-#: inc/config.class.php:220
-msgid "The server endpoint has changed: enter the authentication key again"
-msgstr ""
-
-#: inc/cron.class.php:55
-msgid "Update borgbase records"
-msgstr ""
-
-#: inc/dashboard.class.php:54
-msgid "Usage History"
-msgstr ""
-
-#: inc/dashboard.class.php:62
-msgid "Used Quota"
-msgstr ""
-
-#: inc/dashboard.class.php:70 inc/provider.class.php:151
-msgid "Number of Repositories"
-msgstr ""
-
-#: inc/dashboard.class.php:78 inc/provider.class.php:164
-msgid "Current Use"
-msgstr ""
-
-#: inc/dashboard.class.php:86 inc/provider.class.php:221
-msgid "Number of Computers with a Repo Linked"
-msgstr ""
-
-#: inc/provider.class.php:63
-msgid "Total Usage History"
-msgstr ""
-
-#: inc/provider.class.php:100
-msgid "Total Usage Percentage"
-msgstr ""
-
-#: inc/provider.class.php:115
-msgid "Storage usage"
-msgstr ""
-
-#: inc/provider.class.php:123
-msgid "Free storage"
+#: front/borgbase.form.php:102
+msgid "The repository or the computer is already linked"
 msgstr ""

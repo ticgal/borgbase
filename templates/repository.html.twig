@@ -33,7 +33,6 @@
     <form method="post" action="{{ action }}" data-submit-once>
         <input type="hidden" name="repoId" value="{{ data['borg_id'] }}" />
         <input type="hidden" name="computerId" value="{{ value }}" />
-        <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token() }}" />
 
         <div class="row">
             <div class="row ps-4">

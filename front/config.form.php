@@ -29,13 +29,16 @@
  * ----------------------------------------------------------------------
  */
 
+use GlpiPlugin\Borgbase\Config;
+
 if (!Plugin::isPluginActive('borgbase')) {
     throw new Glpi\Exception\Http\NotFoundHttpException();
 }
 
 Session::checkRight('config', UPDATE);
+Config::checkReAuthenticationOrRedirect();
 
-$config = PluginBorgbaseConfig::getConfig();
+$config = Config::getConfig();
 
 if (isset($_POST['update'])) {
     $config->check(1, UPDATE);
@@ -55,4 +58,4 @@ if (isset($_POST['update'])) {
     Html::back();
 }
 
-Html::redirect(\Config::getFormURL() . '?forcetab=' . urlencode(PluginBorgbaseConfig::class . '$1'));
+Html::redirect(\Config::getFormURL() . '?forcetab=' . urlencode(Config::class . '$1'));

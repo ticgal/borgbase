@@ -1,7 +1,8 @@
 dist/
 node_modules/
-vendor/
+/vendor
+/public/vendor
 .gh_token
 composer.lock
 *.min.*
-
+/docs/findings/

@@ -14,9 +14,20 @@ You need a borgbase account. Get a 10 GB free account for life to test it here: 
 
 # How to configure it
 
-After installing the plugin, go to the GLPI configuration (Setup > General > Borgbase) and add the Borgbase API key. **Use a read-only key**: the plugin only reads data.
+Requires GLPI 12.0. After installing the plugin, go to the GLPI configuration (Setup > General > Borgbase) and add the Borgbase API key. **Use a read-only key**: the plugin only reads data.
 
 The server endpoint (`https://api.borgbase.com/graphql` by default) must be an https URL. Changing it clears the saved key, which must be entered again.
+
+If the endpoint is reached through a private network address (on-premise mirror, internal proxy...), GLPI blocks the request unless it is allowed in `config/local_define.php`:
+
+```php
+define('GLPI_SERVERSIDE_URL_ALLOWED_PRIVATE_NETWORKS_CONTEXTS', [
+    // keep the contexts GLPI allows by default (see src/Glpi/Application/SystemConfigurator.php)
+    'Agent',
+    'Auth',
+    'GlpiPlugin\\Borgbase\\Config',
+]);
+```
 
 Configure the permissions of the profiles that will manage the plugin:
 - UPDATE: The user will be able to update the repository data manually.

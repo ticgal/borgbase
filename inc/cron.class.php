@@ -30,83 +30,9 @@
  */
 
 /**
- * Cron
+ * @deprecated Legacy class name kept for other plugins. Use \GlpiPlugin\Borgbase\Cron instead.
  */
-class PluginBorgbaseCron extends CommonGLPI
-{
-    /**
-     * {@inheritDoc}
-     */
-    public static function getTypeName($nb = 0): string
-    {
-        return 'Borgbase';
-    }
 
-    /**
-     * cronInfo
-     *
-     * @param  string $name
-     * @return array
-     */
-    public static function cronInfo($name): array
-    {
-        switch ($name) {
-            case 'borgbaseUpdate':
-                return ['description' => __('Update borgbase records', 'borgbase')];
-        }
-        return [];
-    }
+require_once __DIR__ . '/../src/Cron.php';
 
-    /**
-     * Refresh the data of every linked repository
-     *
-     * @param  CronTask $task
-     * @return int 1 if something was refreshed, 0 otherwise
-     */
-    public static function cronBorgbaseUpdate(CronTask $task): int
-    {
-        /** @var \DBmysql $DB */
-        global $DB;
-
-        $borgbase = new PluginBorgbaseBorgbase();
-        $updated = 0;
-        foreach ($DB->request(['SELECT' => 'borg_id', 'FROM' => PluginBorgbaseBorgbase::getTable()]) as $row) {
-            if ($borgbase->reloadRepo($row['borg_id'])) {
-                $updated++;
-            }
-        }
-        $task->addVolume($updated);
-
-        return $updated > 0 ? 1 : 0;
-    }
-
-    /**
-     * install
-     *
-     * @param  Migration $migration
-     * @return void
-     */
-    public static function install(Migration $migration): void
-    {
-        CronTask::register(
-            self::class,
-            'borgbaseUpdate',
-            DAY_TIMESTAMP,
-            [
-                'comment' => '',
-                'mode'    => CronTask::MODE_EXTERNAL,
-            ],
-        );
-    }
-
-    /**
-     * uninstall
-     *
-     * @param  Migration $migration
-     * @return void
-     */
-    public static function uninstall(Migration $migration): void
-    {
-        // Plugin crontasks are removed by the core on uninstall
-    }
-}
+class_alias(\GlpiPlugin\Borgbase\Cron::class, 'PluginBorgbaseCron');

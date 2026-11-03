@@ -32,6 +32,7 @@
 use Glpi\Exception\Http\AccessDeniedHttpException;
 use Glpi\Exception\Http\BadRequestHttpException;
 use Glpi\Exception\Http\NotFoundHttpException;
+use GlpiPlugin\Borgbase\Borgbase;
 
 if (!Plugin::isPluginActive('borgbase')) {
     throw new NotFoundHttpException();
@@ -53,7 +54,7 @@ if ($action === null) {
     Html::back();
 }
 
-Session::checkRight(PluginBorgbaseBorgbase::$rightname, $actions[$action]);
+Session::checkRight(Borgbase::$rightname, $actions[$action]);
 
 // The computer must exist and be editable by the user (entity): every action
 // writes its link data or its history
@@ -67,11 +68,11 @@ if (!$computer->can($computerId, UPDATE)) {
 }
 
 $repoId = $_POST['repoId'] ?? null;
-if (!PluginBorgbaseBorgbase::isValidRepoId($repoId)) {
+if (!Borgbase::isValidRepoId($repoId)) {
     throw new BadRequestHttpException();
 }
 
-$borgbase = new PluginBorgbaseBorgbase();
+$borgbase = new Borgbase();
 $historyText = sprintf(__('%2$s, by user %1$s'), $_SESSION['glpiname'], $repoId);
 
 switch ($action) {
@@ -88,7 +89,7 @@ switch ($action) {
         if (!$borgbase->unlinkRepo($computerId, $repoId)) {
             throw new NotFoundHttpException();
         }
-        PluginBorgbaseBorgbase::logHistory($computerId, Log::HISTORY_DEL_RELATION, $historyText);
+        Borgbase::logHistory($computerId, Log::HISTORY_DEL_RELATION, $historyText);
         break;
 
     case 'assoc':
@@ -96,7 +97,7 @@ switch ($action) {
         if ($repo === []) {
             Session::addMessageAfterRedirect(__('Repository not found', 'borgbase'), false, ERROR);
         } elseif ($borgbase->linkRepo($repo, $computerId)) {
-            PluginBorgbaseBorgbase::logHistory($computerId, Log::HISTORY_ADD_RELATION, $historyText);
+            Borgbase::logHistory($computerId, Log::HISTORY_ADD_RELATION, $historyText);
         } else {
             Session::addMessageAfterRedirect(__('The repository or the computer is already linked', 'borgbase'), false, ERROR);
         }
