@@ -1,43 +1,42 @@
 # Borgbase - GLPI Plugin CHANGELOG
 
-## [3.0.0-beta.2] - 2026-10-22
-Includes the security fixes from 2.0.1.
+## [3.0.0] - 2026-11-03
+_First release for GLPI 12. Includes all the fixes of 2.0.1._
 
-### Security
-- Linking, reloading and unlinking repositories require the update right on the computer, not only the read right
-- The encrypted API key is no longer exposed through the API, history or exports (undisclosed field)
-- Unlinking only deletes the rows where the repository and the computer belong together
-
-### Fixed
-- The configuration showed the "clear the saved key" checkbox twice (the password field already provides it)
-
-## [3.0.0-beta.1] - 2026-10-09
 ### Features
-- GLPI 12 support (GLPI 11 is no longer supported by this branch)
+- GLPI 12 support
 - Classes moved to `src/` (`GlpiPlugin\Borgbase\*`); the legacy `PluginBorgbase*` names remain as deprecated aliases
-- "Clear the saved key" option in the configuration
 
 ### Changed
-- BorgBase API calls use GLPI's HTTP client (proxy settings honoured, 10 s timeout, no redirects). Endpoints on a private
-  network require `GLPI_SERVERSIDE_URL_ALLOWED_PRIVATE_NETWORKS_CONTEXTS` (see README)
-- The server endpoint must be an https URL; changing it clears the saved authentication key
+- BorgBase API calls use GLPI's HTTP client (proxy settings honoured, 10 s timeout, no redirects). Endpoints on a
+  private network require `GLPI_SERVERSIDE_URL_ALLOWED_PRIVATE_NETWORKS_CONTEXTS` (see README)
 - The configuration page asks for re-authentication, like GLPI's own configuration
-- Uninstalling the plugin now deletes its tables (configuration, including the API key, and repository links)
-- The automatic action is registered at install time instead of on every page load
+- The Reload, Unlink and Link buttons are only shown to users who can update the computer
 - Icons switched to Tabler
 
+### Fixed
+- Usage above 1 PB was shown without unit
+
+## [2.0.1] - 2026-10-23
 ### Security
 - API queries no longer concatenate the computer name or the repository id: GraphQL variables are used and repository
-  ids are validated
-- Linking, reloading and unlinking repositories check the rights on the computer (entity) and that the repository
-  belongs to it; missing rights now return an error instead of being silently ignored
+  ids are validated (a crafted computer name could send arbitrary GraphQL to the BorgBase account)
+- Linking, reloading and unlinking repositories require the update right on the computer (entity) and check that the
+  repository belongs to it; missing rights now return an error instead of being silently ignored
+- The server endpoint must be an https URL; changing it clears the saved authentication key. API calls only use https,
+  never follow redirects and have a timeout
+- Only the server, key and matching option of the configuration can be saved
 - Dashboard cards require the Borgbase read right and only count computers of the active entities
+- The encrypted API key is no longer exposed through the API (undisclosed field)
+
+### Changed
+- Uninstalling the plugin now deletes its tables (configuration, including the API key, and repository links)
+- The automatic action is registered at install time instead of on every page load
 
 ### Fixed
 - Automatic linking from the computer tab no longer breaks the tab with a wrong redirect
 - Unlinking a repository could delete the link of another computer
 - Errors when the API is unreachable or returns unexpected data (computer tab, dashboard cards, automatic action)
-- Usage above 1 PB was shown without unit
 
 ## [2.0.0] - 2026-01-27
 ### Features
