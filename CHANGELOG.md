@@ -15,6 +15,8 @@ _First release for GLPI 12. Includes all the fixes of 2.0.1._
 - Icons switched to Tabler
 
 ### Fixed
+- Purging a computer left its repository link behind, so that repository could never be linked again; existing orphan
+  links are removed on update
 - Usage above 1 PB was shown without unit
 
 ## [2.0.1] - 2026-10-23

@@ -35,7 +35,7 @@ use GlpiPlugin\Borgbase\Config;
 use GlpiPlugin\Borgbase\Dashboard;
 use GlpiPlugin\Borgbase\Profile;
 
-define('PLUGIN_BORGBASE_VERSION', '3.0.0-beta.2');
+define('PLUGIN_BORGBASE_VERSION', '3.0.0');
 define("PLUGIN_BORGBASE_MIN_GLPI_VERSION", "12.0.0");
 define("PLUGIN_BORGBASE_MAX_GLPI_VERSION", "12.1.0");
 define("PLUGIN_BORGBASE_ICON", "ti ti-cloud-upload");
@@ -62,6 +62,11 @@ function plugin_init_borgbase(): void
         $PLUGIN_HOOKS[Hooks::CONFIG_PAGE]['borgbase'] = 'front/config.form.php';
     }
     $PLUGIN_HOOKS[Hooks::DASHBOARD_CARDS]['borgbase'] = [Dashboard::class, 'dashboardCards'];
+
+    // A purged computer releases its repository (otherwise it could never be linked again)
+    $PLUGIN_HOOKS[Hooks::ITEM_PURGE]['borgbase'] = [
+        Computer::class => [Borgbase::class, 'cleanForComputer'],
+    ];
 }
 
 /**

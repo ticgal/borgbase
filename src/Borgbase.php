@@ -37,6 +37,7 @@ use Computer;
 use DBConnection;
 use Dropdown;
 use Glpi\Application\View\TemplateRenderer;
+use Glpi\DBAL\QuerySubQuery;
 use Glpi\Toolbox\HttpClient;
 use GLPIKey;
 use Log;
@@ -434,6 +435,28 @@ class Borgbase extends CommonDBTM
     }
 
     /**
+     * Remove the links of a purged computer (hook item_purge)
+     *
+     * @param  Computer $computer
+     * @return void
+     */
+    public static function cleanForComputer(Computer $computer): void
+    {
+        /** @var \DBmysql $DB */
+        global $DB;
+
+        $computerId = (int) $computer->getID();
+        if ($computerId <= 0) {
+            return;
+        }
+        $DB->delete(Relation::getTable(), [
+            'itemtype' => Computer::class,
+            'items_id' => $computerId,
+        ]);
+        $DB->delete(self::getTable(), ['computer_id' => $computerId]);
+    }
+
+    /**
      * Refresh the stored data of a linked repository
      *
      * @param  string $repoId
@@ -817,6 +840,27 @@ class Borgbase extends CommonDBTM
             ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation}";
             $DB->doQuery($query);
         }
+
+        // Up to 3.0.0 purging a computer left its link behind and the repository could
+        // never be linked again: remove the links of computers that no longer exist
+        $orphans = new QuerySubQuery([
+            'SELECT' => 'id',
+            'FROM'   => Computer::getTable(),
+        ]);
+        $DB->delete(self::getTable(), [
+            'NOT' => ['computer_id' => $orphans],
+        ]);
+        $DB->delete(Relation::getTable(), [
+            'itemtype' => Computer::class,
+            'NOT'      => ['items_id' => $orphans],
+        ]);
+        $links = new QuerySubQuery([
+            'SELECT' => 'id',
+            'FROM'   => $table,
+        ]);
+        $DB->delete(Relation::getTable(), [
+            'NOT' => ['plugin_borgbase_borgbases_id' => $links],
+        ]);
     }
 
     /**

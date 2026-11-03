@@ -108,3 +108,19 @@ Requirement: the plugin works against the real API (`https://api.borgbase.com/gr
   reload, no JS errors.
 - [x] Real data notes: `overageList` is empty for the test account (usage cards show no data / 0, correct); repo `currentUsage`
   values (8.08, 12.08, 30.08) are shown as MB.
+
+## Step 4 — Release 3.0.0 (2026-11-03)
+
+Requirement: merge of develop (2.0.1), version 3.0.0, CI of glpi-project/plugin-ci-workflows green.
+
+- [x] Merge of develop (2.0.1) with the GLPI 12 code kept; logic compared with 2.0.1 (normalized names): only the expected differences (HttpClient, ReAuth, buttons gated by the computer update right).
+- [x] `composer.json` `autoloader-suffix` = `PluginBorgbase` (CI "Check composer autoloader suffix" requires `Plugin<Key>`).
+- [x] `tools/HEADER` renamed to `tools/TICGAL_HEADER`: the CI licence check only runs when `tools/HEADER` exists.
+- [x] Bug found (present since 2.0.0): purging a computer left its link, so the repository could never be linked again.
+  Fixed with an `item_purge` hook on Computer and an orphan cleanup in `install()`.
+  - T4.12: link → purge computer → link and relation gone; the same repository links to a second computer (twice).
+  - T1.3: an orphan link (non-existent computer) is removed by `plugin:install --force`; the upgrade on the dev instance removed 3 real orphans.
+- [x] Upgrade 3.0.0-beta.2 → 3.0.0 with `plugin:install --force` keeps links and a single cron task.
+- [x] `t_safe.py` (no uninstall, no config rewrite: skips T1, T2.3–T2.12, T9.1–T9.4): 32/32 + browser 6/6, strict and production; `php-errors.log` clean.
+- [ ] Full battery (`t_all.py`, uninstalls the plugin) not run for this step: blocked by the session safety classifier after the real key was lost on 2026-10-22. Skipped tests cover code unchanged since their last green run.
+- [ ] Real API smoke test not re-run: the real key must be entered again (it was overwritten by the 2026-10-22 battery run).
