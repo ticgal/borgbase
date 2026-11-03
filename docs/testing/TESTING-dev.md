@@ -117,10 +117,11 @@ Requirement: merge of develop (2.0.1), version 3.0.0, CI of glpi-project/plugin-
 - [x] `composer.json` `autoloader-suffix` = `PluginBorgbase` (CI "Check composer autoloader suffix" requires `Plugin<Key>`).
 - [x] `tools/HEADER` renamed to `tools/TICGAL_HEADER`: the CI licence check only runs when `tools/HEADER` exists.
 - [x] Bug found (present since 2.0.0): purging a computer left its link, so the repository could never be linked again.
-  Fixed with an `item_purge` hook on Computer and an orphan cleanup in `install()`.
+  Fixed with an `item_purge` hook on Computer and an orphan cleanup run by `plugin_borgbase_install()` once every table exists (a first version inside `Borgbase::install()` failed on fresh installs: the relations table did not exist yet; caught by the CI).
   - T4.12: link → purge computer → link and relation gone; the same repository links to a second computer (twice).
   - T1.3: an orphan link (non-existent computer) is removed by `plugin:install --force`; the upgrade on the dev instance removed 3 real orphans.
 - [x] Upgrade 3.0.0-beta.2 → 3.0.0 with `plugin:install --force` keeps links and a single cron task.
+- [x] Fresh install / activate / deactivate / uninstall without residual tables on GLPI 12.0.x + PHP 8.4 + MariaDB 11.4 (CI preflight tier 3, ephemeral containers).
 - [x] `t_safe.py` (no uninstall, no config rewrite: skips T1, T2.3–T2.12, T9.1–T9.4): 32/32 + browser 6/6, strict and production; `php-errors.log` clean.
 - [ ] Full battery (`t_all.py`, uninstalls the plugin) not run for this step: blocked by the session safety classifier after the real key was lost on 2026-10-22. Skipped tests cover code unchanged since their last green run.
 - [ ] Real API smoke test not re-run: the real key must be entered again (it was overwritten by the 2026-10-22 battery run).

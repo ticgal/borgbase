@@ -79,6 +79,7 @@ function plugin_borgbase_install(): bool
     foreach (plugin_borgbase_classes() as $classname) {
         $classname::install($migration);
     }
+    Borgbase::cleanOrphanLinks();
 
     $migration->executeMigration();
 

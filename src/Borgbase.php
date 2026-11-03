@@ -457,6 +457,45 @@ class Borgbase extends CommonDBTM
     }
 
     /**
+     * Remove the links of computers that no longer exist
+     *
+     * Up to 3.0.0 purging a computer left its link behind and the repository could
+     * never be linked again. Called at install, once every table exists.
+     *
+     * @return void
+     */
+    public static function cleanOrphanLinks(): void
+    {
+        /** @var \DBmysql $DB */
+        global $DB;
+
+        $table = self::getTable();
+        $relations = Relation::getTable();
+        if (!$DB->tableExists($table) || !$DB->tableExists($relations)) {
+            return;
+        }
+
+        $computers = new QuerySubQuery([
+            'SELECT' => 'id',
+            'FROM'   => Computer::getTable(),
+        ]);
+        $DB->delete($table, [
+            'NOT' => ['computer_id' => $computers],
+        ]);
+        $DB->delete($relations, [
+            'itemtype' => Computer::class,
+            'NOT'      => ['items_id' => $computers],
+        ]);
+        $links = new QuerySubQuery([
+            'SELECT' => 'id',
+            'FROM'   => $table,
+        ]);
+        $DB->delete($relations, [
+            'NOT' => ['plugin_borgbase_borgbases_id' => $links],
+        ]);
+    }
+
+    /**
      * Refresh the stored data of a linked repository
      *
      * @param  string $repoId
@@ -840,27 +879,6 @@ class Borgbase extends CommonDBTM
             ) ENGINE=InnoDB DEFAULT CHARSET={$default_charset} COLLATE={$default_collation}";
             $DB->doQuery($query);
         }
-
-        // Up to 3.0.0 purging a computer left its link behind and the repository could
-        // never be linked again: remove the links of computers that no longer exist
-        $orphans = new QuerySubQuery([
-            'SELECT' => 'id',
-            'FROM'   => Computer::getTable(),
-        ]);
-        $DB->delete(self::getTable(), [
-            'NOT' => ['computer_id' => $orphans],
-        ]);
-        $DB->delete(Relation::getTable(), [
-            'itemtype' => Computer::class,
-            'NOT'      => ['items_id' => $orphans],
-        ]);
-        $links = new QuerySubQuery([
-            'SELECT' => 'id',
-            'FROM'   => $table,
-        ]);
-        $DB->delete(Relation::getTable(), [
-            'NOT' => ['plugin_borgbase_borgbases_id' => $links],
-        ]);
     }
 
     /**
